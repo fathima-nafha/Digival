@@ -1,0 +1,58 @@
+{% load static %}
+<html>
+<head>
+<title>Sign_In</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/sign.css' %}">
+</head>
+<body style="background-image:url(images/back.jpg);margin-top: 100p">
+<header>
+		<table width='100%'>
+			<tr>
+				<td style="color: white;"><p><h1 class='h'>DIGIVAL</h1>
+					<h3 class='h'>An Automated Evaluation System</h3></p></td>
+			</tr>
+		</table>
+	</header>
+<br><br>
+<form action="{% url 'recognition:homepage' %}" align="center" method="post">
+	{% csrf_token %}
+	{{ form }}
+    <div class="container" style="border-radius: 20px;">
+    
+		<h3 align="center">Sign In</h3>
+		<label for="email"><b>Username</b></label><input type="text" placeholder="Username" name="email" required>
+		 <label for="psw"><b>Password</b></label><input type="password" placeholder="Password" name="psw" required>
+		<input type="checkbox">Remember Me
+		<hr>
+    	<button type="submit" class="registerbtn">Login</button>
+	</div>
+	<div class="container signin">
+    <p>Don't have an account? <a href="{% url 'recognition:signup' %}">Sign Up</a>.</p>
+    <a href="{% url 'recognition:forgotpassword' %}">Forgot your password?</a>
+ </div>
+ </div>
+</form>
+<footer>
+		<hr>
+		<p>
+			<b>Contact Information</b>
+			<table cellspacing="10px">
+				<tr>
+					<td><img src="{% static 'images/phone.png' %}" class='headfoot'></td>
+					<td>+91 9876543210</td>
+				</tr>
+				<tr>
+					<td><img src="{% static 'images/email.png' %}" class="headfoot"></td>
+					<td>queries@digival.com</td>
+				</tr>
+			</table>
+
+			<p style="background-color: black; color: white;" align="center">
+				&copy Copyright All Rights Reserved | Designed By Digival
+			</p>
+		</p>
+	</footer>
+</body>
+</html>

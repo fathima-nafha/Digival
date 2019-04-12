@@ -1,0 +1,27 @@
+header {
+    background-color: #7AD07E;
+    font-family: Georgia;
+    color: #96f691;
+    text-shadow: 3px 5px 5px #1e3e03e6;;
+}
+.h
+{
+	margin-left: 10pt;
+}
+.headfoot
+{
+	width: 20pt;
+	height: 20pt;
+}
+footer{
+width: 100%;
+background-color: #C9F3B6;
+position: relative;
+margin-top: auto;
+}
+#user
+{
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+}

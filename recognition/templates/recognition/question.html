@@ -1,0 +1,108 @@
+{% load static %}
+
+<html>
+<head>
+	<title>Digival</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/sign.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
+	<script type="text/javascript">
+		function addRow(tableID)
+		{
+			var table = document.getElementById('questions');
+			var num = document.getElementById('num').value;
+			var rowCount = table.rows.length;
+
+			if(!num){
+				alert('Enter number of Questions');
+			}
+			else if(num==rowCount){
+				alert("Total number of Questions entered is "+num);
+			}
+			else{
+				var row = table.insertRow(rowCount);
+
+				var cell1 = row.insertCell(0);
+				cell1.innerHTML = "Question Number";
+
+				var cell2 = row.insertCell(1);
+				var element1 = document.createElement("input");
+				element1.type = "text";
+				element1.name="qnum[]";
+				cell2.appendChild(element1);
+
+				var cell3 = row.insertCell(2);
+				cell3.innerHTML = "Answer"
+
+				var cell4 = row.insertCell(3);
+				var element2 = document.createElement("input");
+				element2.type = "text";
+				element2.name="ans[]";
+				cell4.appendChild(element2);
+			}
+			
+		}	
+	</script>
+</head>
+<body>
+<header>
+		<table width='100%'>
+			<tr>
+				<td style="color: white;"><p><h1 class='h'>DIGIVAL</h1>
+					<h3 class='h'>An Automated Evaluation System</h3></p></td>
+					<td width="150px">
+						<table cellspacing="10pt">
+						<tr><a href="">
+							<td><img src="{% static 'images/user.png' %}" id='user'></td>
+							<td><h2 style="color: white;" align="center">Logout</h2></td></a>
+						</tr></table></td>
+			</tr>
+		</table>
+	</header>
+<br><br>
+	<div class="container">
+		<h1>Upload Question Bank</h1><hr>
+		<form action=''>
+			<label><b>Enter Class</b></label>
+			<input type="text" name="class" value='' required="">
+
+			<label><b>Enter Question paper Series</b></label>
+			<input type="text" name="qseries" value='' required="">
+
+			<label><b>Enter Number of Questions</b></label>
+			<input type="text" name="number" value='' id="num" required="">
+
+			<p><label><b>Upload Question Paper</b></label></p>
+			<p><input type="file" name="ques" accept="image/*"></p>
+			<hr>
+			<label><b>Enter Answer Keys</b></label> &nbsp;&nbsp;
+			<input type="button" value='Add Answer'  onclick="addRow()" class="addRow">
+		<div>
+			<table id='questions' cellspacing="20">
+				
+			</table>
+		</div>
+		<hr><center><input type="submit" value='Submit' name="" id="submitBtn"></center>
+		</form>
+	</div>
+<footer>
+		<hr>
+		<p>
+			<b>Contact Information</b>
+			<table cellspacing="10px">
+				<tr>
+					<td><img src="{% static 'images/phone.png' %}" class='headfoot'></td>
+					<td>+91 9876543210</td>
+				</tr>
+				<tr>
+					<td><img src="{% static 'images/email.png' %}" class="headfoot"></td>
+					<td>queries@digival.com</td>
+				</tr>
+			</table>
+
+			<p style="background-color: black; color: white;" align="center">
+				&copy Copyright All Rights Reserved | Designed By Digival
+			</p>
+		</p>
+	</footer>
+</body>
+</html>

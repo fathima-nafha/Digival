@@ -1,0 +1,8 @@
+venv/
+.idea/
+db.sqlite3
+*.pyd
+misc.xml
+workspace.xml
+Digival.iml
+.idea/workspace.xml

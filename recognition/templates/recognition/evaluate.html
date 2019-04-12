@@ -1,0 +1,74 @@
+{% load static %}
+
+<html>
+<head>
+	<title>Digival</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/sign.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
+</head>
+<body>
+<header>
+		<table width='100%'>
+			<tr>
+				<td style="color: white;"><p><h1 class='h'>DIGIVAL</h1>
+					<h3 class='h'>An Automated Evaluation System</h3></p></td>
+					<td width="150px">
+						<table cellspacing="10pt">
+						<tr><a href="">
+							<td><img src="{% static 'images/user.png' %}" id='user'></td>
+							<td><h2 style="color: white;" align="center">Logout</h2></td></a>
+						</tr></table></td>
+			</tr>
+		</table>
+	</header>
+<br><br>
+	<div class="container">
+		<h1>Evaluation</h1><hr>
+		<form action=''>
+			<label><b>Choose Question Series</b></label>
+			<select name="qs">
+				<option>Q1</option>
+				<option>Q2</option>
+				<option>Q3</option>
+				<option>Q4</option>
+			</select>
+
+			<label><b>Choose Class</b></label>
+			<select name="class">
+				<option>1</option>
+				<option>2</option>
+				<option>3</option>
+				<option>4</option>
+			</select>
+
+			<p><label><b>Upload Answer Sheet</b></label></p>
+			<p><input type="file" name="answer" accept="image/*"></p>
+
+			<label><b>Enter Roll Number</b></label>
+			<input type="text" name="qseries" value='' required="">
+
+			<hr><center><input type="submit" value='Evaluate' name="" id="submitBtn"></center>
+		</form>
+	</div>
+<footer>
+		<hr>
+		<p>
+			<b>Contact Information</b>
+			<table cellspacing="10px">
+				<tr>
+					<td><img src="{% static 'images/phone.png' %}" class='headfoot'></td>
+					<td>+91 9876543210</td>
+				</tr>
+				<tr>
+					<td><img src="{% static 'images/email.png' %}" class="headfoot"></td>
+					<td>queries@digival.com</td>
+				</tr>
+			</table>
+
+			<p style="background-color: black; color: white;" align="center">
+				&copy Copyright All Rights Reserved | Designed By Digival
+			</p>
+		</p>
+	</footer>
+</body>
+</html>

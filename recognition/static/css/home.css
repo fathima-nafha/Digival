@@ -1,0 +1,23 @@
+a {
+	text-decoration: none;
+}
+
+.content {
+	width: 400px;
+	height: 250px;
+}
+
+figure {
+	cursor: pointer;
+}
+figcaption {
+	padding: 5px 10px;
+    box-shadow: inset 0 10px 4px -8px rgba(0,0,0,0.2);
+    text-align: center;
+    color: #3a87ad;
+    font-weight: 300;
+    font-size: 31.5px;
+    line-height: 40px;
+    margin: 10px 0;
+    font-family: inherit;
+}
