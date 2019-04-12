@@ -3,6 +3,6 @@ venv/
 db.sqlite3
 *.pyd
 misc.xml
-workspace.xml
 Digival.iml
+Digival/__pycache__/
 .idea/workspace.xml
