@@ -13,11 +13,13 @@
 				<td style="color: white;"><p><h1 class='h'>DIGIVAL</h1>
 					<h3 class='h'>An Automated Evaluation System</h3></p></td>
 					<td width="150px">
+						<a href="{% url 'recognition:login' %}" id="logout">
 						<table cellspacing="10pt">
-						<tr><a href="">
+						<tr>
 							<td><img src="{% static 'images/user.png' %}" id='user'></td>
-							<td><h2 style="color: white;" align="center">Logout</h2></td></a>
-						</tr></table></td>
+							<td><h2 style="color: white;" align="center">Logout</h2></td>
+						</tr></table></a>
+					</td>
 			</tr>
 		</table>
 	</header>

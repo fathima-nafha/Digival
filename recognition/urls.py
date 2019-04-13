@@ -10,7 +10,7 @@ urlpatterns = [
     url('questionbank/', views.question, name='question'),
     url('homepage/', views.homepage, name='homepage'),
     url('questionseries/', views.questionseries, name='qs'),
-    url('result/', views.result, name='result'),
+    url('result/', views.add_student, name='add_student'),
     url('userprofile/', views.userprofile, name='userprofile'),
     url('^$', views.login, name='login'),
 ]
