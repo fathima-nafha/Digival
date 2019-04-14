@@ -1,11 +1,12 @@
-<!DOCTYPE html>
+{% load static %}
 <html>
 <head>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
 <style>
-body{
+/*body{
   background-image: url("images/question1.jpg");
-}
+}*/
 .card {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
   max-width: 370px;
@@ -13,31 +14,31 @@ body{
   margin: auto;
   text-align: center;
   font-family: arial;
-  background-color: white;
+  background-color: black;
 }
 
 .title {
-  color: grey;
+  color: white;
   font-size: 18px;
 }
 
 button {
-  border: none;
-  outline: 0;
+
   display: inline-block;
-  padding: 8px;
+
+  background-color: #4CAF50;
   color: white;
-  background-color: #000;
-  text-align: center;
+  padding: 16px 20px;
+  margin: 8px 0;
+  border: none;
   cursor: pointer;
-  width: 100%;
-  font-size: 18px;
+  opacity: 0.9
 }
 
 a {
   text-decoration: none;
   font-size: 22px;
-  color: black;
+  color: white;
 }
 
 button:hover, a:hover {
@@ -46,10 +47,18 @@ button:hover, a:hover {
 </style>
 </head>
 <body>
+<header>
+		<table width='100%'>
+			<tr>
+				<td style="color: white;"><p><h1 class='h'>DIGIVAL</h1>
+					<h3 class='h'>An Automated Evaluation System</h3></p></td>
+			</tr>
+		</table>
+	</header>
 
-<h1 style="text-align:center;color: white;">User Profile</h1>
+<h1 style="text-align:center;color:black;">User Profile</h1>
 
-<div class="card">
+<div class="card"  style="color:white;">
   <!--img src="/w3images/team2.jpg" alt="John" style="width:100%"--><br>
   <h1>John Doe</h1>
   <p class="title">Asst. Prof. St.Joseph Engineering College</p>
@@ -61,18 +70,39 @@ button:hover, a:hover {
     <a href="#"><i class="fa fa-facebook"></i></a> 
   </div>
   <div>
-  <p><button style="background-color:red;">Edit</button><button>Save</button></p>
+  <p><button style=" width:100%;">Edit</button>
+  <button style=" width:100%;">Save</button></p>
 </div>
 </div>
 
 <div style="text-align: center;">
-<a href="table1.html">
-<button style="background-color:black;width: 20%;font-family:bold;">EDIT  STUDENT DETAILS</button></a>  &nbsp; &nbsp; &nbsp; &nbsp;
-<a href="questionseries.html"><button style="background-color:#B22222;width: 20%;" >QUESTION SERIES </button></a>
+<a href="{% url 'recognition:add_student' %}">
+<button style="background-color:#4caf50;width: 20%;font-family:bold;">EDIT  STUDENT DETAILS</button></a>  &nbsp; &nbsp; &nbsp; &nbsp;
+<a href="{% url 'recognition:qs' %}"><button style="background-color:#4caf50;width: 20%;" >QUESTION SERIES </button></a>
 <br><br>
 <br><br>
-<button style="background-color:#B22222;width: 20%;col">EDIT the QUESTION PAPER</button> &nbsp; &nbsp; &nbsp; &nbsp;
-<button style="background-color:black;width: 20%;">LOGOUT</button>
+<button style="background-color:#4caf50;width: 20%;col">EDIT the QUESTION PAPER</button> &nbsp; &nbsp; &nbsp; &nbsp;
+<a href="{% url 'recognition:login' %}"> <button style="background-color:#4caf50;width: 20%;">LOGOUT</button></a>
 </div>
+<footer>
+		<hr>
+		<p>
+			<b>Contact Information</b>
+			<table cellspacing="10px">
+				<tr>
+					<td><img src="{% static 'images/phone.png' %}" class='headfoot'></td>
+					<td>+91 9876543210</td>
+				</tr>
+				<tr>
+					<td><img src="{% static 'images/email.png' %}" class="headfoot"></td>
+					<td>queries@digival.com</td>
+				</tr>
+			</table>
+
+			<p style="background-color: black; color: white;" align="center">
+				&copy Copyright All Rights Reserved | Designed By Digival
+			</p>
+		</p>
+	</footer>
 </body>
 </html>

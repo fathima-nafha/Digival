@@ -28,8 +28,8 @@ def homepage(request):
     return render(request, 'recognition/homepage.html')
 
 
-def result(request):
-    return render(request, 'recognition/result.html')
+def add_student(request):
+    return render(request, 'recognition/add_student.html')
 
 
 def questionseries(request):
