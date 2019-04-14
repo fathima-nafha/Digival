@@ -55,7 +55,7 @@ ROOT_URLCONF = 'DigiVal.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(SETTINGS_PATH, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -64,14 +64,15 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'debug': DEBUG,
+
         },
     },
 ]
-TEMPLATE_DIRS = (
-    os.path.join(SETTINGS_PATH, 'templates'),
-)
+
 WSGI_APPLICATION = 'DigiVal.wsgi.application'
 
+DEBUG = True
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
