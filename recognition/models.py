@@ -4,7 +4,11 @@ from django.db import models
 
 
 def upload_location(instance,filename):
-    return "%s/%s" %(instance.id,filename)
+    return "%s/%s" %(instance.qp_series,filename)
+
+
+def upload_location2(instance,filename):
+    return "%s/%s" %(instance.student.s_id,filename)
 
 
 class Teacher(models.Model):
@@ -32,22 +36,8 @@ class Student(models.Model):
         return self.s_name
 
 
-class QuestionBank(models.Model):
-    qb_qno = models.CharField(max_length=5,primary_key=True, null=False)
-    qb_series = models.CharField(max_length=5, null=False)
-    qb_class = models.IntegerField(null=False)
-    qb_answers = models.CharField(max_length=30, null=False)
-
-
-    class Meta:
-        unique_together = (('qb_qno', 'qb_series', 'qb_class'),)
-
-    def __str__(self):
-        return self.qb_qno
-
-
 class QuestionPaper(models.Model):
-    qb_series = models.ForeignKey(QuestionBank, on_delete=models.CASCADE)
+    qp_series = models.CharField(primary_key=True, max_length=5)
     question_paper = models.ImageField(upload_to=upload_location,
                                        null=True,
                                        blank=True,
@@ -57,13 +47,27 @@ class QuestionPaper(models.Model):
     width_field = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.qb_series.qb_qno
+        return self.qp_series
+
+class QuestionBank(models.Model):
+    qb_qno = models.CharField(max_length=5,primary_key=True, null=False)
+    qb = models.ForeignKey(QuestionPaper, on_delete=models.CASCADE)
+    qb_class = models.IntegerField(null=False)
+    qb_answers = models.CharField(max_length=30, null=False)
+
+
+    class Meta:
+        unique_together = (('qb_qno', 'qb', 'qb_class'),)
+
+    def __str__(self):
+        return self.qb_qno+" "+ self.qb.qp_series
+
 
 
 class AddStudent(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    answer_paper = models.ImageField(upload_to=upload_location,
+    answer_paper = models.ImageField(upload_to=upload_location2,
                                        null=True,
                                        blank=True,
                                        width_field="width_field",
@@ -74,13 +78,14 @@ class AddStudent(models.Model):
     def __str__(self):
         return  str(self.teacher.t_id) +" " + self.student.s_name
 
+
 class AddQuestionBank(models.Model):
 
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    question_bank = models.ForeignKey(QuestionBank, on_delete=models.CASCADE)
+    questionpaper = models.ForeignKey(QuestionPaper,to_field='qp_series', on_delete=models.CASCADE)
 
     def __str__(self):
-        return  self.teacher.t_name +" " + self.question_bank.qb_qno
+        return  self.teacher.t_name
 
 
 

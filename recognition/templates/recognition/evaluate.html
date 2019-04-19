@@ -29,10 +29,9 @@
 		<form action=''>
 			<label><b>Choose Question Series</b></label>
 			<select name="qs">
-				<option>Q1</option>
-				<option>Q2</option>
-				<option>Q3</option>
-				<option>Q4</option>
+				{% for entry in items %}
+    				<option value="{{ entry.qb_series }}">{{ entry.qb_qno }}</option>
+				{% endfor %}
 			</select>
 
 			<label><b>Choose Class</b></label>

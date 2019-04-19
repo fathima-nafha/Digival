@@ -9,7 +9,7 @@
 		function addRow(tableID)
 		{
 			var table = document.getElementById('questions');
-			var num = document.getElementById('num').value;
+			var num = document.getElementById('number').value;
 			var rowCount = table.rows.length;
 
 			if(!num){
@@ -63,24 +63,25 @@
 <br><br>
 	<div class="container">
 		<h1>Upload Question Bank</h1><hr>
-		<form action=''>
+		<form enctype="multipart/form-data" method="post">
+			{% csrf_token %}
 			<label><b>Enter Class</b></label>
-			<input type="text" name="class" value='' required="">
+			<input type="number" id="class" name="class" value='' required="">
 
 			<label><b>Enter Question paper Series</b></label>
-			<input type="text" name="qseries" value='' required="">
+			<input type="text" name="qseries" id="qseries" value='' required="">
 
 			<label><b>Enter Number of Questions</b></label>
-			<input type="text" name="number" value='' id="num" required="">
+			<input type="text" name="number" value='' id="number" required="">
 
-			<p><label><b>Upload Question Paper</b></label></p>
-			<p><input type="file" name="ques" accept="image/*"></p>
-			<hr>
+			<!--<p><label><b>Upload Question Paper</b></label></p>-->
+			<!--<p><input type="file" name="ques" accept="image/*"></p>-->
+			<!--<hr>-->
 			<label><b>Enter Answer Keys</b></label> &nbsp;&nbsp;
-			<input type="button" value='Add Answer'  onclick="addRow()" class="addRow">
+			<input type="button" value='Add Answer' onclick="addRow()" class="addRow">
 		<div>
 			<table id='questions' cellspacing="20">
-				
+
 			</table>
 		</div>
 		<hr><center><input type="submit" value='Submit' name="" id="submitBtn"></center>
