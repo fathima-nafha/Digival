@@ -43,14 +43,17 @@ class QuestionPaper(models.Model):
                                        blank=True,
                                        width_field="width_field",
                                        height_field="height_field")
+    qp_class = models.IntegerField(null=False)
     height_field = models.IntegerField(default=0)
     width_field = models.IntegerField(default=0)
 
     def __str__(self):
         return self.qp_series
 
+
 class QuestionBank(models.Model):
-    qb_qno = models.CharField(max_length=5,primary_key=True, null=False)
+    q_id = models.AutoField(primary_key=True)
+    qb_qno = models.CharField(max_length=5, null=False)
     qb = models.ForeignKey(QuestionPaper, on_delete=models.CASCADE)
     qb_class = models.IntegerField(null=False)
     qb_answers = models.CharField(max_length=30, null=False)
@@ -74,6 +77,9 @@ class AddStudent(models.Model):
                                        height_field="height_field")
     height_field = models.IntegerField(default=0)
     width_field = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = (('teacher', 'student'),)
 
     def __str__(self):
         return  str(self.teacher.t_id) +" " + self.student.s_name

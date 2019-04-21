@@ -5,6 +5,12 @@
 	<title>Digival</title>
 	<link rel="stylesheet" type="text/css" href="{% static 'css/sign.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
+	<script>
+        if(messages)
+        {
+            alert('{{messages}}')
+        }
+    </script>
 </head>
 <body>
 <header>
@@ -24,30 +30,35 @@
 		</table>
 	</header>
 <br><br>
+
 	<div class="container">
 		<h1>Evaluation</h1><hr>
-		<form action=''>
+		<form action='' method="post" enctype="multipart/form-data">
+			{% csrf_token %}
 			<label><b>Choose Question Series</b></label>
-			<select name="qs">
-				{% for entry in items %}
-    				<option value="{{ entry.qb_series }}">{{ entry.qb_qno }}</option>
+			<select name="qseries">
+				{% for entry in qp_series %}
+    				<option value="{{ entry.qp_series }}">{{ entry.qp_series }}</option>
 				{% endfor %}
 			</select>
 
 			<label><b>Choose Class</b></label>
 			<select name="class">
-				<option>1</option>
-				<option>2</option>
-				<option>3</option>
-				<option>4</option>
+                {% for entry in class %}
+    				<option value="{{ entry.qp_class }}">{{ entry.qp_class }}</option>
+				{% endfor %}
 			</select>
 
 			<p><label><b>Upload Answer Sheet</b></label></p>
 			<p><input type="file" name="answer" accept="image/*"></p>
 
 			<label><b>Enter Roll Number</b></label>
-			<input type="text" name="qseries" value='' required="">
+			<select name="s_rollno">
+                {% for rollno in r_no %}
+    				<option value="{{ rollno.s_rollno }}">{{ rollno.s_rollno }}</option>
 
+				{% endfor %}
+			</select>
 			<hr><center><input type="submit" value='Evaluate' name="" id="submitBtn"></center>
 		</form>
 	</div>
