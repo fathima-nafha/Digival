@@ -4,14 +4,16 @@ from . import views
 app_name='recognition';
 
 urlpatterns = [
-    url('forgotpassword/', views.forgot, name='forgotpassword'),
-    url('signup/', views.signup, name='signup'),
-    url('evaluate/', views.evaluate, name='evaluate'),
-    url('questionbank/', views.question, name='question'),
-    url('homepage/', views.homepage, name='homepage'),
-    url('questionseries/', views.questionseries, name='qs'),
-    url('result/', views.add_student, name='add_student'),
-    url('userprofile/', views.userprofile, name='userprofile'),
+    url(r'^forgotpassword/$', views.forgot, name='forgotpassword'),
+    url(r'^signup/$', views.signup, name='signup'),
+    url(r'^evaluate/$', views.evaluate, name='evaluate'),
+    url(r'^questionbank/$', views.question, name='question'),
+    url(r'^homepage/$', views.homepage, name='homepage'),
+    url(r'^questionseries/$', views.questionseries, name='qs'),
+    url(r'^result/$', views.add_student, name='add_student'),
+    url(r'^userprofile/$', views.userprofile, name='userprofile'),
+    url(r'^results/$', views.results, name='results'),
     url('^$', views.login, name='login'),
+
 ]
 

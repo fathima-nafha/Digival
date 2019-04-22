@@ -30,6 +30,11 @@ def evaluate(request):
         qb_class = request.POST['class']
         qb_roll = request.POST['s_rollno']
         student = Student.objects.get(s_rollno=qb_roll)
+        if len(request.FILES) == 0:
+            return render(request, 'recognition/evaluate.html',
+                          {'qp_series': qp_series_fromdb, 'class': classes, 'r_no': all_records,
+                           'messages': 2})
+
         answer_paper = request.FILES['answer']
         answer_model = AddStudent.objects.create(teacher=teacher, student=student, answer_paper = answer_paper)
         url = 'media/' + str(qb_roll) + '/' + answer_paper.name
@@ -48,10 +53,10 @@ def evaluate(request):
             answer_model.delete()
             return render(request, 'recognition/evaluate.html',
                           {'qp_series': qp_series_fromdb, 'class': classes, 'r_no': all_records,
-                           'messages': 'Unable to identify characters in the image! Please try again'})
+                           'messages': 1 })
 
     return render(request, 'recognition/evaluate.html',
-                  {'qp_series': qp_series_fromdb, 'class': classes, 'r_no': all_records, 'messages': ''})
+                  {'qp_series': qp_series_fromdb, 'class': classes, 'r_no': all_records, 'messages': 0 })
 
 
 def question(request):
@@ -74,6 +79,8 @@ def question(request):
         return render(request, "recognition/question.html", {'form':form})
     #return render(request, 'recognition/question.html')
 
+def results(request):
+    return render(request, 'recognition/results.html')
 
 def homepage(request):
     return render(request, 'recognition/homepage.html')
@@ -89,3 +96,5 @@ def questionseries(request):
 
 def userprofile(request):
     return render(request, 'recognition/userprofile.html')
+
+

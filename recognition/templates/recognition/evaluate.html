@@ -5,11 +5,17 @@
 	<title>Digival</title>
 	<link rel="stylesheet" type="text/css" href="{% static 'css/sign.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
-	<script>
-        if(messages)
+	<script type = "text/javascript">
+
+        switch({{messages}})
         {
-            alert('{{messages}}')
+            case 1: alert('Unable to recognize any text in the image! Please try again!');
+            break;
+            case 2: alert('Please Upload an Image!');
+            break;
+
         }
+
     </script>
 </head>
 <body>
@@ -50,7 +56,7 @@
 			</select>
 
 			<p><label><b>Upload Answer Sheet</b></label></p>
-			<p><input type="file" name="answer" accept="image/*"></p>
+			<p><input id = "answer" type="file" name="answer" accept="image/*"></p>
 
 			<label><b>Enter Roll Number</b></label>
 			<select name="s_rollno">
