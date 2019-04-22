@@ -6,3 +6,4 @@ misc.xml
 Digival.iml
 Digival/__pycache__/
 .idea/workspace.xml
+Digival/recognition/migrations/*
