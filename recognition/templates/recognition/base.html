@@ -1,0 +1,60 @@
+{% load static %}
+
+<html>
+
+<head>
+<title>SignUp</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="{% static 'css/sign.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<style>
+	.text-right {
+
+    text-align: left !important;
+    margin-left: -160px;
+
+}
+</style>
+</head>
+
+
+<body class="override">
+<header>
+		<table width='100%'>
+			<tr>
+				<td style="color: white;"><p><h1 class='h'>DIGIVAL</h1>
+					<h3 class='h'>An Automated Evaluation System</h3></p></td>
+			</tr>
+		</table>
+	</header>
+
+    <div class="container">
+        <div class="row">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+<footer>
+		<hr>
+		<p>
+			<b>Contact Information</b>
+			<table cellspacing="10px">
+				<tr>
+					<td><img src="{% static 'images/phone.png' %}" class='headfoot'></td>
+					<td>+91 9876543210</td>
+				</tr>
+				<tr>
+					<td><img src="{% static 'images/email.png' %}" class="headfoot"></td>
+					<td>queries@digival.com</td>
+				</tr>
+			</table>
+
+			<p style="background-color: black; color: white;" align="center">
+				&copy Copyright All Rights Reserved | Designed By Digival
+			</p>
+		</p>
+	</footer>
+</body>
+</html>

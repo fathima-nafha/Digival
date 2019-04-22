@@ -1,56 +1,46 @@
-{% load static %}
-<html>
-<head>
-<title>Sign_In</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
-	<link rel="stylesheet" type="text/css" href="{% static 'css/sign.css' %}">
-</head>
-<body style="background-image:url(/static/images/images.jfif);margin-top: 100p">
-<header>
-		<table width='100%'>
-			<tr>
-				<td style="color: white;"><p><h1 class='h'>DIGIVAL</h1>
-					<h3 class='h'>An Automated Evaluation System</h3></p></td>
-			</tr>
-		</table>
-	</header>
-<br><br>
-<form action="{% url 'recognition:homepage' %}" align="center" method="post">
-	{% csrf_token %}
-	{{ form }}
-    <div class="container" style="border-radius: 20px;">
-    
-		<h3 align="center">Sign In</h3>
-		<label for="email"><b>Username</b></label><input type="email" placeholder="Username" name="email" required>
-		 <label for="psw"><b>Password</b></label><input type="password" placeholder="Password" name="psw" required>
-		<input type="checkbox">Remember Me
-		<hr>
-    	<button type="submit" class="registerbtn">Login</button><hr>
-		<center><p>Don't have an account? <a href="{% url 'recognition:signup' %}">Sign Up</a>.</p>
-    	<a href="{% url 'recognition:forgotpassword' %}">Forgot your password?</a></center>
-	</div>
- </div>
-</form>
-<footer>
-		<hr>
-		<p>
-			<b>Contact Information</b>
-			<table cellspacing="10px">
-				<tr>
-					<td><img src="{% static 'images/phone.png' %}" class='headfoot'></td>
-					<td>+91 9876543210</td>
-				</tr>
-				<tr>
-					<td><img src="{% static 'images/email.png' %}" class="headfoot"></td>
-					<td>queries@digival.com</td>
-				</tr>
-			</table>
+{% extends "recognition/base1.html" %}
 
-			<p style="background-color: black; color: white;" align="center">
-				&copy Copyright All Rights Reserved | Designed By Digival
-			</p>
-		</p>
-	</footer>
-</body>
-</html>
+{% block content %}
+
+<div class="container" xmlns="http://www.w3.org/1999/html">
+        <form action="{% url 'recognition:login' %}" method="post">
+            {% csrf_token %}
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="font-size:25px;margin-left:-29px;font-weight:bold;">Login</div>
+
+                    <hr style="margin-left:-120px; width:90%">
+                    <div class="panel-body" style="width: 750px;margin-left: -75px;">
+                    {% if error_message %}
+                            <p class="bg-danger p-d ml-b" style="width:400px;">{{ error_message }}</p>
+                    {% endif %}
+
+                        <div class="form-group clearfix">
+                            <label for="username" class="col-md-4 control-label text-right">Username:</label>
+                            <div class="col-md-6">
+                                <input name="username" value="" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="password" class="col-md-4 control-label text-right">Password:</label>
+                            <div class="col-md-6">
+                                <input name="password" type="password" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-md-offset-4">
+                            <center>
+                            <input name="login" type="submit" value="Login" class="btn btn-success"> &nbsp;
+                           <hr>
+                            <p>Don't have an account? <a href="/signup/">Sign Up</a>.</p>
+                            <a href="/forgotpassword/">Forgot your password?</a>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
+
