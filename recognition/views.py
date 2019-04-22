@@ -4,8 +4,13 @@ from .forms import UploadQuestionBank
 from .models import QuestionBank,AddStudent, Student,Teacher,QuestionPaper, AddQuestionBank
 from django.http import HttpResponse
 from .recognize import recognize, evaluate_paper
-# Create your views here.
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
+from django.contrib.auth import login as auth_login
 
+# Create your views here.
+from recognition.templates.recognition.forms import RegisterForm
 
 def forgot(request):
     return render(request, 'recognition/forgotpassword.html')
@@ -13,11 +18,75 @@ def forgot(request):
 
 
 def login(request):
-    return render(request, 'recognition/Sign_in.html')
+    if request.method == 'POST':
+        # Process the request if posted data are available
+        username = request.POST['username']
+        password = request.POST['password']
+        # Check username and password combination if correct
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            # Save session as cookie to login the user
+            auth_login(request,user)
+            # Success, now let's login the user.
+            return render(request, 'recognition/homepage.html')
+        else:
+            # Incorrect credentials, let's throw an error to the screen.
+            return render(request, 'recognition/Sign_in.html',
+                          {'error_message': 'Incorrect username and / or password.'})
+    else:
+        # No post data availabe, let's just show the page to the user.
+        return render(request, 'recognition/Sign_in.html')
 
 
 def signup(request):
-    return render(request, 'recognition/signup.html')
+    template = 'recognition/signup.html'
+
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = RegisterForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            if User.objects.filter(username=form.cleaned_data['username']).exists():
+                return render(request, template, {
+                    'form': form,
+                    'error_message': 'Username already exists.'
+                })
+            elif User.objects.filter(email=form.cleaned_data['email']).exists():
+                return render(request, template, {
+                    'form': form,
+                    'error_message': 'Email already exists.'
+                })
+            elif form.cleaned_data['password'] != form.cleaned_data['password_repeat']:
+                return render(request, template, {
+                    'form': form,
+                    'error_message': 'Passwords do not match.'
+                })
+            else:
+                # Create the user:
+                user = User.objects.create_user(
+                    form.cleaned_data['username'],
+                    form.cleaned_data['email'],
+                    form.cleaned_data['password']
+                )
+                user.first_name = form.cleaned_data['first_name']
+                user.last_name = form.cleaned_data['last_name']
+                user.phone_number = form.cleaned_data['phone_number']
+                user.save()
+
+                # Login the user
+                auth_login(request, user)
+
+                # redirect to accounts page:
+                return render(request, 'recognition/Sign_in.html')
+               # return HttpResponseRedirect('recognition/Sign_in.html')
+
+    # No post data availabe, let's just show the page.
+    else:
+        form = RegisterForm()
+
+    return render(request, template, {'form': form})
+
+    #return render(request, 'recognition/signup.html')
 
 
 def evaluate(request):

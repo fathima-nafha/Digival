@@ -1,78 +1,74 @@
-{% load static %}
+{% extends "recognition/base.html" %}
 
-<html>
-<head>
-<title>SignUp</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css" href="{% static 'css/sign.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
-</head>
-<body>
-<header>
-		<table width='100%'>
-			<tr>
-				<td style="color: white;"><p><h1 class='h'>DIGIVAL</h1>
-					<h3 class='h'>An Automated Evaluation System</h3></p></td>
-			</tr>
-		</table>
-	</header>
-<br><br>
-<form action="/action_page.php" align="center">
-  <div class="container">
-    <h1>Register</h1>
+{% block content %}
+    <div class="container">
+        <h1>Register</h1>
     <p>Please fill in this form to create an account.</p>
     <hr>
+        <form action="{% url 'recognition:signup' %}" method="post" >
+            {% csrf_token %}
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-body" align="center" style="width: 150%">
+                        {% if error_message %}
+                            <p class="bg-danger p-d ml-b">{{ error_message }}</p>
+                        {% endif %}
 
-    <label for="email"><b>Email</b></label>
-    <input type="email" placeholder="Enter Email" name="email" required>
-
-    <label for="School"><b>School</b></label>
-    <input type="text" placeholder="Enter School Name" name="school" required>
-
-    <label for="security"><b>Choose security question</b></label>
-      <select>
-          <option value="car">What's your favourite car?</option>
-          <option value="pet">What's your favourite pet?</option>
-          <option value="book">What's your favourite book?</option>
-          <option value="movie">What's your favourite movie?</option>
-      </select><br>
-    <label for="ans"><b>Answer</b></label>
-    <input type="text" placeholder="Enter your answer" name="ans" required>
-
-
-    <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" required>
-
-    <label for="psw-repeat"><b>Repeat Password</b></label>
-    <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
-    <hr>
-    <button type="submit" class="registerbtn">Register</button>
-  </div>
-  
-  <div class="container signin">
+                        <div class="form-group clearfix">
+                            <label for="{{ form.username.id_for_label }}" class="col-md-4 control-label text-right">Username<span class="text-red">*</span>:</label>
+                            <div class="col-md-6">
+                                {{ form.username }}
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.email.id_for_label }}" class="col-md-4 control-label text-right">Email<span class="text-red">*</span>:</label>
+                            <div class="col-md-6">
+                                {{ form.email }}
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.password.id_for_label }}" class="col-md-4 control-label text-right">Password<span class="text-red">*</span>:</label>
+                            <div class="col-md-6">
+                                {{ form.password }}
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.password_repeat.id_for_label }}" class="col-md-4 control-label text-right">Confirm password:</label>
+                            <div class="col-md-6">
+                                {{ form.password_repeat }}
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.first_name.id_for_label }}" class="col-md-4 control-label text-right">First Name:</label>
+                            <div class="col-md-6">
+                                {{ form.first_name }}
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.last_name.id_for_label }}" class="col-md-4 control-label text-right">Last Name:</label>
+                            <div class="col-md-6">
+                                {{ form.last_name }}
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.phone_number.id_for_label }}" class="col-md-4 control-label text-right">Phone Number:</label>
+                            <div class="col-md-6">
+                                {{ form.phone_number }}
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-md-offset-4">
+                            <input type="submit" value="Register" class="btn btn-success">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+<div class="container signin">
     <p>Already have an account? <a href="{% url 'recognition:login' %}">Sign in</a>.</p>
   </div>
-</form>
-<footer>
-		<hr>
-		<p>
-			<b>Contact Information</b>
-			<table cellspacing="10px">
-				<tr>
-					<td><img src="{% static 'images/phone.png' %}" class='headfoot'></td>
-					<td>+91 9876543210</td>
-				</tr>
-				<tr>
-					<td><img src="{% static 'images/email.png' %}" class="headfoot"></td>
-					<td>queries@digival.com</td>
-				</tr>
-			</table>
 
-			<p style="background-color: black; color: white;" align="center">
-				&copy Copyright All Rights Reserved | Designed By Digival
-			</p>
-		</p>
-	</footer>
-</body>
-</html>
+{% endblock %}
+
+
 
