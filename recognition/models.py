@@ -15,10 +15,7 @@ class Teacher(models.Model):
     t_id = models.AutoField(primary_key=True)
     t_name = models.CharField(max_length=128, null=True)
     t_email = models.EmailField(null=True)
-    t_password = models.CharField(max_length=30,null=True)
-    t_school_name = models.CharField(max_length=128, null=True)
-    security_question = models.CharField(max_length=128, null=True)
-    security_answer = models.CharField(max_length=50, null=True)
+    t_school_name = models.CharField(max_length=128, blank=True, null=True)
 
     def __str__(self):
         return self.t_name

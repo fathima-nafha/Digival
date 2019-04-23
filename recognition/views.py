@@ -1,20 +1,18 @@
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
-from .forms import UploadQuestionBank
+from .forms import UploadQuestionBank, RegisterForm
 from .models import QuestionBank,AddStudent, Student,Teacher,QuestionPaper, AddQuestionBank
-from django.http import HttpResponse
 from .recognize import recognize, evaluate_paper
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
 from django.contrib.auth import login as auth_login
 
 # Create your views here.
-from recognition.templates.recognition.forms import RegisterForm
+
+
 
 def forgot(request):
     return render(request, 'recognition/forgotpassword.html')
-
 
 
 def login(request):
@@ -27,6 +25,7 @@ def login(request):
         if user is not None:
             # Save session as cookie to login the user
             auth_login(request,user)
+
             # Success, now let's login the user.
             return render(request, 'recognition/homepage.html')
         else:
@@ -73,9 +72,14 @@ def signup(request):
                 user.phone_number = form.cleaned_data['phone_number']
                 user.save()
 
+                f_name = form.cleaned_data['first_name']
+                l_name = form.cleaned_data['last_name']
+                email = form.cleaned_data['email']
+
+
                 # Login the user
                 auth_login(request, user)
-
+                teacher = Teacher.objects.create(t_name=f_name + l_name, t_email=email)
                 # redirect to accounts page:
                 return render(request, 'recognition/Sign_in.html')
                # return HttpResponseRedirect('recognition/Sign_in.html')
