@@ -160,7 +160,9 @@ def question(request):
     #return render(request, 'recognition/question.html')
 
 def results(request):
-    return render(request, 'recognition/results.html')
+    students = Student.objects.all()
+    args = {'students':students}
+    return render(request, 'recognition/results.html',args)
 
 def homepage(request):
     return render(request, 'recognition/homepage.html')

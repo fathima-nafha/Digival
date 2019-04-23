@@ -1,10 +1,45 @@
-<!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Results</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/results.css' %}">
 </head>
 <body>
 
+	<div class="limiter">
+
+		<div class="container-table100">
+            <p> RESULTS</p>
+			<div class="wrap-table100">
+				<div class="table100">
+					<table>
+						<thead>
+							<tr class="table100-head">
+								<th class="column1">Roll Number</th>
+								<th class="column2">Name</th>
+								<th class="column3">Class</th>
+								<th class="column4">School</th>
+								<th class="column5">Marks</th>
+							</tr>
+						</thead>
+						<tbody>
+                                {% for everyRecord in students %}
+								<tr>
+									<td class="column1">{{ everyRecord.s_rollno }}</td>
+									<td class="column2">{{ everyRecord.s_name }}</td>
+									<td class="column3">{{ everyRecord.s_class }}</td>
+									<td class="column4">{{ everyRecord.s_school_name }}</td>
+									<td class="column5">{{ everyRecord.s_marks }}</td>
+
+								</tr>
+                                {% endfor %}
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
