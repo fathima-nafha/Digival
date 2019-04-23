@@ -8,7 +8,7 @@ def upload_location(instance,filename):
 
 
 def upload_location2(instance,filename):
-    return "%s/%s" %(instance.student.s_id,filename)
+    return "%s/%s" %(instance.student.s_rollno,filename)
 
 
 class Teacher(models.Model):
@@ -79,7 +79,7 @@ class AddStudent(models.Model):
         unique_together = (('teacher', 'student'),)
 
     def __str__(self):
-        return  str(self.teacher.t_id) +" " + self.student.s_name
+        return  str(self.teacher.t_id) +" " + self.student.s_name + " " + str(self.student.s_rollno)
 
 
 class AddQuestionBank(models.Model):

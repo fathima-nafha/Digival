@@ -95,6 +95,7 @@ def signup(request):
 
 def evaluate(request):
     qp_series_fromdb = QuestionPaper.objects.filter()
+    messages = 0
     teacher = Teacher.objects.get(pk=1)
     all_records = Student.objects.all()
     classes = QuestionPaper.objects.order_by('qp_class').values('qp_class').distinct()
@@ -102,15 +103,17 @@ def evaluate(request):
         qp_series = request.POST['qseries']
         qb_class = request.POST['class']
         qb_roll = request.POST['s_rollno']
-        student = Student.objects.get(s_rollno=qb_roll)
+        student = Student.objects.get(s_rollno = qb_roll)
         if len(request.FILES) == 0:
+            messages = 2
             return render(request, 'recognition/evaluate.html',
                           {'qp_series': qp_series_fromdb, 'class': classes, 'r_no': all_records,
-                           'messages': 2})
+                           'messages': messages})
 
         answer_paper = request.FILES['answer']
         answer_model = AddStudent.objects.create(teacher=teacher, student=student, answer_paper = answer_paper)
         url = 'media/' + str(qb_roll) + '/' + answer_paper.name
+        print(url)
         results = recognize(url)
         if results != -1:
             db_answer = dict()
@@ -118,18 +121,22 @@ def evaluate(request):
             for every in answers:
                 db_answer[every.qb_qno] = every.qb_answers
             test_score = evaluate_paper(results, db_answer)
+            student.s_marks = test_score
+            student.save()
             args = {'1': qp_series, '2': qb_class, '3': qb_roll, 'url': url, 'results': results, 'score' : test_score, 'a':db_answer}
-            return render(request, 'recognition/success.html', args)
+            print(args)
+            messages = 3
 
         else:
             answer_model.answer_paper.delete()
             answer_model.delete()
+            messages = 1
             return render(request, 'recognition/evaluate.html',
                           {'qp_series': qp_series_fromdb, 'class': classes, 'r_no': all_records,
-                           'messages': 1 })
+                           'messages': messages })
 
     return render(request, 'recognition/evaluate.html',
-                  {'qp_series': qp_series_fromdb, 'class': classes, 'r_no': all_records, 'messages': 0 })
+                  {'qp_series': qp_series_fromdb, 'class': classes, 'r_no': all_records, 'messages': messages })
 
 
 def question(request):
