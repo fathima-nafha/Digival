@@ -1,18 +1,23 @@
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
-from .forms import UploadQuestionBank, RegisterForm
+from .forms import UploadQuestionBank, RegisterForm, QuestionBankForm
 from .models import QuestionBank,AddStudent, Student,Teacher,QuestionPaper, AddQuestionBank
 from .recognize import recognize, evaluate_paper
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth import login as auth_login
 
-# Create your views here.
-
-
 
 def forgot(request):
     return render(request, 'recognition/forgotpassword.html')
+
+
+# class BookUpdateView(BSModalUpdateView):
+#     model = QuestionBank
+#     template_name = 'recognition/update_qb.html'
+#     form_class = QuestionBankForm
+#     success_message = 'Success: Book was updated.'
+#     success_url = reverse_lazy('homepage')
 
 
 def login(request):
@@ -25,7 +30,9 @@ def login(request):
         if user is not None:
             # Save session as cookie to login the user
             auth_login(request,user)
-
+            user_email = User.objects.get(username = username)
+            teacher_id = Teacher.objects.get(t_email = user_email.email)
+            request.session['t_id'] = teacher_id.t_id
             # Success, now let's login the user.
             return render(request, 'recognition/homepage.html')
         else:
@@ -96,7 +103,9 @@ def signup(request):
 def evaluate(request):
     qp_series_fromdb = QuestionPaper.objects.filter()
     messages = 0
-    teacher = Teacher.objects.get(pk=1)
+    if request.session.has_key('t_id'):
+        t_id = request.session['t_id']
+        teacher = Teacher.objects.get(t_id = t_id)
     all_records = Student.objects.all()
     classes = QuestionPaper.objects.order_by('qp_class').values('qp_class').distinct()
     if request.method == 'POST':
@@ -165,7 +174,12 @@ def results(request):
     return render(request, 'recognition/results.html',args)
 
 def homepage(request):
-    return render(request, 'recognition/homepage.html')
+    if request.session.has_key('t_id'):
+        t_id = request.session['t_id']
+        return render(request, 'recognition/homepage.html', {"t_id": t_id})
+    else:
+        return render(request, 'recognition/results.html')
+
 
 
 def add_student(request):
@@ -173,7 +187,18 @@ def add_student(request):
 
 
 def questionseries(request):
-    return render(request, 'recognition/questionseries.html')
+    q_s = QuestionPaper.objects.all()
+    args = {'qp_series' : q_s}
+    if request.method == 'POST':
+        q_series = request.POST['q_series']
+        questionBank = QuestionBank.objects.filter(qb__qp_series = q_series)
+        args = {'qp_series' : q_s, 'qb': questionBank}
+        return render(request, 'recognition/questionseries.html', args)
+
+    return render(request, 'recognition/questionseries.html', args)
+
+def edit_qp(request):
+   pass
 
 
 def userprofile(request):
