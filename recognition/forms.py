@@ -18,6 +18,10 @@ class UploadQuestionBank(forms.Form):
     question_paper = forms.ImageField(label="question-paper")
 
 
+class PasswordResetRequestForm(forms.Form):
+    email_or_username = forms.CharField(label=("Email Or Username"), max_length=254)
+
+
 
 
 
