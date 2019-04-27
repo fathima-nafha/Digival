@@ -4,7 +4,7 @@ from django.db import models
 
 
 def upload_location(instance,filename):
-    return "%s/%s" %(instance.qp_series,filename)
+    return "%s/%s" %(instance.qp_test_series+instance.qp_subject,filename)
 
 
 def upload_location2(instance,filename):
@@ -27,14 +27,15 @@ class Student(models.Model):
     s_name = models.CharField(max_length=128, null=True)
     s_class = models.IntegerField(null=True)
     s_school_name = models.CharField(max_length=128, null=True)
-    s_marks = models.IntegerField(default=0)
+
 
     def __str__(self):
         return self.s_name
 
 
 class QuestionPaper(models.Model):
-    qp_series = models.CharField(primary_key=True, max_length=5)
+    qp_subject = models.CharField(max_length=15)
+    qp_test_series = models.CharField(max_length=15)
     question_paper = models.ImageField(upload_to=upload_location,
                                        null=True,
                                        blank=True,
@@ -44,23 +45,24 @@ class QuestionPaper(models.Model):
     height_field = models.IntegerField(default=0)
     width_field = models.IntegerField(default=0)
 
+    class Meta:
+        unique_together = (('qp_subject', 'qp_test_series', 'qp_class'),)
+
     def __str__(self):
-        return self.qp_series
+        return self.qp_subject +" "+ self.qp_test_series
 
 
 class QuestionBank(models.Model):
     q_id = models.AutoField(primary_key=True)
     qb_qno = models.CharField(max_length=5, null=False)
     qb = models.ForeignKey(QuestionPaper, on_delete=models.CASCADE)
-    qb_class = models.IntegerField(null=False)
     qb_answers = models.CharField(max_length=30, null=False)
 
-
     class Meta:
-        unique_together = (('qb_qno', 'qb', 'qb_class'),)
+        unique_together = (('qb_qno', 'qb'),)
 
     def __str__(self):
-        return self.qb_qno+" "+ self.qb.qp_series
+        return self.qb_qno+" "+ self.qb.qp_test_series
 
 
 
@@ -75,9 +77,6 @@ class AddStudent(models.Model):
     height_field = models.IntegerField(default=0, null=True)
     width_field = models.IntegerField(default=0, null=True)
 
-    class Meta:
-        unique_together = (('teacher', 'student'),)
-
     def __str__(self):
         return  str(self.teacher.t_id) +" " + self.student.s_name + " " + str(self.student.s_rollno)
 
@@ -85,11 +84,18 @@ class AddStudent(models.Model):
 class AddQuestionBank(models.Model):
 
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    questionpaper = models.ForeignKey(QuestionPaper,to_field='qp_series', on_delete=models.CASCADE)
+    questionpaper = models.ForeignKey(QuestionPaper,on_delete=models.CASCADE)
 
     def __str__(self):
         return  self.teacher.t_name
 
 
+class StudentMarks(models.Model):
+    question_paper = models.ForeignKey(QuestionPaper, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    marks = models.IntegerField(default=0, null=True)
+
+    class Meta:
+        unique_together = (('question_paper','student'),)
 
 

@@ -1,15 +1,18 @@
-<!DOCTYPE html>
+{% load static %}
+
+
 <html>
 <head>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'css/questionseries.css' %}">
 <style>
 	body{
 		background-image: url('{{ STATIC_URL }}images/question3.jpg');
 		 height: 100%; 
 
-  /* Center and scale the image nicely */
-  
+
+
   background-repeat: no-repeat;
   background-size: cover;
 	}
@@ -23,6 +26,17 @@
   font-family: arial;
   background-color: white;
 }
+input[type=submit]{
+  background-color:black;
+  color: white;
+  outline-color:
+  black;width:150px;
+  margin-left:100px;
+  padding: 15px;
+}
+input[type=submit]:hover{
+ cursor:pointer;
+ }
 </style>
 	<title></title>
 </head>
@@ -34,18 +48,51 @@
  
   
   <div style="margin: 24px 0;">
-    <form action="">
-  <select name="QS">
-    <option value="a">Q1</option>
-    <option value="b">Q2</option>
-    <option value="c">Q3</option>
-    <option value="d">Q4</option>
+    <form action="" method="post">
+      {% csrf_token %}
+  <select name="q_series">
+    {% for entry in qp_series %}
+      <option value="{{ entry.qp_series }}">{{ entry.qp_series }}</option>
+    {% endfor %}
   </select>
   <br><br>
-  <input type="submit" style="background-color:black; color: white;outline-color: black;width:150px;"><br><br>
+  <input type="submit" ><br><br>
 </form>
+
   </div>
 </div>
 
+	<div class="limiter">
+
+		<div class="container-table100">
+			<div class="wrap-table100">
+				<div class="table100">
+					<table>
+						<thead>
+							<tr class="table100-head">
+								<th class="column1">Question Number</th>
+								<th class="column2">Answer</th>
+								<th class="column3"></th>
+							</tr>
+						</thead>
+						<tbody>
+                                {% for everyRecord in qb %}
+								<tr>
+									<td class="column1">{{ everyRecord.qb_qno }}</td>
+									<td class="column2">{{ everyRecord.qb_answers }}</td>
+									<!--<td class="column3"><input type="submit" value="Edit" name="Edit" onclick=""></td>-->
+								</tr>
+                                {% endfor %}
+
+						</tbody>
+
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </body>
+
+
 </html>

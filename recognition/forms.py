@@ -1,5 +1,6 @@
 from django import forms
-
+from bootstrap_modal_forms.forms import BSModalForm
+from .models import QuestionBank
 
 class RegisterForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
@@ -23,6 +24,10 @@ class PasswordResetRequestForm(forms.Form):
 
 
 
+class QuestionBankForm(BSModalForm):
+    class Meta:
+        model = QuestionBank
+        exclude = ['qb']
 
 
 
