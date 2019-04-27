@@ -4,7 +4,7 @@ from django.db import models
 
 
 def upload_location(instance,filename):
-    return "%s/%s" %(instance.qp_series,filename)
+    return "%s/%s" %(instance.qp_test_series+instance.qp_subject,filename)
 
 
 def upload_location2(instance,filename):
@@ -46,7 +46,7 @@ class QuestionPaper(models.Model):
     width_field = models.IntegerField(default=0)
 
     class Meta:
-        unique_together = (('qp_subject', 'qp_test_series', 'qb_class'),)
+        unique_together = (('qp_subject', 'qp_test_series', 'qp_class'),)
 
     def __str__(self):
         return self.qp_subject +" "+ self.qp_test_series
@@ -62,7 +62,7 @@ class QuestionBank(models.Model):
         unique_together = (('qb_qno', 'qb'),)
 
     def __str__(self):
-        return self.qb_qno+" "+ self.qb.qp_series
+        return self.qb_qno+" "+ self.qb.qp_test_series
 
 
 
