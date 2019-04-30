@@ -49,7 +49,7 @@ class QuestionPaper(models.Model):
         unique_together = (('qp_subject', 'qp_test_series', 'qp_class'),)
 
     def __str__(self):
-        return self.qp_subject +" "+ self.qp_test_series
+        return self.qp_subject +" "+self.qp_test_series
 
 
 class QuestionBank(models.Model):
@@ -62,7 +62,7 @@ class QuestionBank(models.Model):
         unique_together = (('qb_qno', 'qb'),)
 
     def __str__(self):
-        return self.qb_qno+" "+ self.qb.qp_test_series
+        return self.qb.qp_subject+" "+self.qb.qp_test_series +" " +self.qb_qno
 
 
 

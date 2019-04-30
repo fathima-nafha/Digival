@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^evaluate/$', views.evaluate, name='evaluate'),
     url(r'^questionbank/$', views.question, name='question'),
     url(r'^homepage/$', views.homepage, name='homepage'),
+    url(r'^save/$', views.save, name='save'),
     url(r'^questionseries/$', views.questionseries, name='qs'),
     url(r'^result/$', views.add_student, name='add_student'),
     url(r'^userprofile/$', views.userprofile, name='userprofile'),

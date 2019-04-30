@@ -5,6 +5,7 @@
 	<title>Digival</title>
 	<link rel="stylesheet" type="text/css" href="{% static 'css/sign.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
+
 	<script type = "text/javascript">
 
         switch({{messages}})
@@ -14,9 +15,9 @@
             case 2: alert('Please Upload an Image!');
             break;
 			case 3: alert('Successfully Evaluated!');
+
 			break;
         }
-
     </script>
 </head>
 <body>
@@ -42,10 +43,16 @@
 		<h1>Evaluation</h1><hr>
 		<form action='' method="post" enctype="multipart/form-data">
 			{% csrf_token %}
-			<label><b>Choose Question Series</b></label>
-			<select name="qseries">
-				{% for entry in qp_series %}
-    				<option value="{{ entry.qp_series }}">{{ entry.qp_series }}</option>
+			<label><b>Choose Subject</b></label>
+			<select name="subject">
+				{% for entry in questionBank_subject %}
+    				<option value="{{ entry.qp_subject }}">{{ entry.qp_subject }}</option>
+				{% endfor %}
+			</select>
+			<label><b>Choose Test Series</b></label>
+			<select name="testseries">
+				{% for entry in questionBank_testseries %}
+    				<option value="{{ entry.qp_test_series }}">{{ entry.qp_test_series }}</option>
 				{% endfor %}
 			</select>
 
@@ -67,8 +74,12 @@
 				{% endfor %}
 			</select>
 			<hr><center><input type="submit" value='Evaluate' name="" id="submitBtn"></center>
+
+
+
 		</form>
 	</div>
+
 <footer>
 		<hr>
 		<p>

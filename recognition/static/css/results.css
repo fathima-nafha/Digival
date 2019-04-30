@@ -6,6 +6,15 @@
 	box-sizing: border-box;
 }
 
+#two{
+
+align: center;
+left : 300px;
+    position:relative;
+    height: 300px;
+    width : 30%;
+
+}
 body, html {
 	height: 100%;
 	font-family: sans-serif;
@@ -87,9 +96,10 @@ iframe {
 /*//////////////////////////////////////////////////////////////////
 [ Table ]*/
 
-.limiter {
+.limiter, {
   width: 100%;
   margin: 0 auto;
+
 }
 
 .container-table100 {
