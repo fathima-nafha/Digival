@@ -4,7 +4,7 @@ from django.db import models
 
 
 def upload_location(instance,filename):
-    return "%s/%s" %(instance.qp_test_series+instance.qp_subject,filename)
+    return "%s/%s" %(instance.qp_subject+" "+instance.qp_test_series,filename)
 
 
 def upload_location2(instance,filename):

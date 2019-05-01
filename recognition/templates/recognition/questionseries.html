@@ -16,7 +16,8 @@
             width: 70px;
             display : inline;
          }
-
+         if({{message}})
+         alert('Sucessfuly Updated!');
       </style>
 <script>
    $(document).on("click", ".modalLoginForm", function () {
@@ -24,14 +25,14 @@
      var qno = $(this).data('id1');
      var answer = $(this).data('id2');
      var class1 = $(this).data('id3');
-     var subject = $(this).data('id4');
+     var qbSubject = $(this).data('id4');
      var test_series = $(this).data('id5');
      var q_id = $(this).data('id6');
 
      $(".modal-body #qb_qno").val( qno );
      $(".modal-body #qbAnswer").val( answer );
      $(".modal-body #qbClass").val( class1 );
-     $(".modal-body #qbSubject").val( subject );
+     $(".modal-body #qbSubject").val( qbSubject );
      $(".modal-body #qbTest_series").val( test_series );
      $(".modal-body #q_id").val( q_id );
      $('#modalLoginForm').modal('show');
@@ -133,7 +134,7 @@
             <span aria-hidden="true">&times;</span>
             </button>
          </div>
-         <form method="post" enctype="multipart/form-data" action="/save/">
+         <form method="post" enctype="multipart/form-data" action="">
                {% csrf_token %}
          <div class="modal-body mx-3">
             <div class="md-form mb-5">
@@ -170,7 +171,7 @@
 
          </div>
          <div class="modal-footer d-flex justify-content-center">
-            <button class="btn btn-default btn-success" >Save</button>
+            <button class="btn btn-default btn-success" onClick="CloseAndRefresh(); return:true;" >Save</button>
          </div>
          </form>
       </div>

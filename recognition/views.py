@@ -1,7 +1,7 @@
-from django.shortcuts import render, render_to_response
-from django.template import RequestContext
+from django.shortcuts import render,redirect
+from django.urls import reverse
 from .forms import UploadQuestionBank, RegisterForm, QuestionBankForm
-from .models import QuestionBank, AddStudent, StudentMarks, Student, Teacher, QuestionPaper, AddQuestionBank
+from .models import QuestionBank, AddStudent, StudentMarks, Student, Teacher, QuestionPaper
 from .recognize import recognize, evaluate_paper
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
@@ -217,10 +217,13 @@ def questionseries(request):
     questionBank_testseries = QuestionPaper.objects.values('qp_test_series').distinct()
     classes = QuestionPaper.objects.order_by('qp_class').values('qp_class').distinct()
 
-    if request.method == 'POST':
+    if request.method == 'POST' and 'qbAnswer' not in request.POST:
         subject = request.POST['subject']
         testseries = request.POST['testseries']
         qb_class = request.POST['class']
+        request.session['subject'] =subject
+        request.session['testseries'] = testseries
+        request.session['qb_class'] = qb_class
         questionBank = QuestionBank.objects.filter(qb__qp_class=qb_class, qb__qp_subject=subject,
                                                    qb__qp_test_series=testseries)
         args = {'class': classes,
@@ -229,24 +232,50 @@ def questionseries(request):
                 'questionBank': questionBank}
 
         return render(request, 'recognition/questionseries.html', args)
+    if request.method == 'POST' and 'qbAnswer' in request.POST:
+
+        qbAnswer = request.POST['qbAnswer']
+        q_id = request.POST['q_id']
+        QuestionBank.objects.filter(q_id=q_id).update(qb_answers=qbAnswer)
+        if request.session.has_key('subject') and request.session.has_key('qb_class') and request.session.has_key('testseries') :
+            subject = request.session['subject']
+            qb_class = request.session['qb_class']
+            testseries = request.session ['testseries']
+            questionBank = QuestionBank.objects.filter(qb__qp_class=qb_class, qb__qp_subject=subject,
+                                                       qb__qp_test_series=testseries)
+            args = {'class': classes,
+                    'questionBank_subject': questionBank_subject,
+                    'questionBank_testseries': questionBank_testseries,
+                    'questionBank': questionBank}
+
+            return render(request, 'recognition/questionseries.html', args)
+
     args = {'class': classes, 'questionBank_subject': questionBank_subject,
             'questionBank_testseries': questionBank_testseries}
     return render(request, 'recognition/questionseries.html', args)
 
 
 def save(request):
-    if request.method == 'POST':
-        qbClass = request.POST['qbClass']
-        qbAnswer = request.POST['qbAnswer']
-        qbSubject = request.POST['qbSubject']
-        qbTest_series = request.POST['qbTest_series']
-        qb_qno = request.POST['qb_qno']
-        q_id = request.POST['q_id']
-        # QuestionBank.objects.filter()
+    questionBank_subject = QuestionPaper.objects.values('qp_subject').distinct()
+    questionBank_testseries = QuestionPaper.objects.values('qp_test_series').distinct()
+    classes = QuestionPaper.objects.order_by('qp_class').values('qp_class').distinct()
 
-        args = {'q_id': q_id, 'qbClass': qbClass, 'qbAnswer':qbAnswer, 'qb_qno': qb_qno, 'qbSubject': qbSubject, 'qbTest_series': qbTest_series}
-        return render(request, 'recognition/success.html', args)
-    return render(request, 'recognition/questionseries.html')
+    if request.method == 'POST':
+        # qbClass = request.POST['qbClass']
+        qbAnswer = request.POST['qbAnswer']
+        # qbSubject = request.POST['qbSubject']
+        # qbTest_series = request.POST['qbTest_series']
+        # qb_qno = request.POST['qb_qno']
+        q_id = request.POST['q_id']
+        QuestionBank.objects.filter(q_id = q_id).update(qb_answers = qbAnswer)
+        # args = {'class': classes, 'questionBank_subject': questionBank_subject,
+        #         'questionBank_testseries': questionBank_testseries, 'message': 1}
+        # return redirect(reverse('questionseries'), args)
+    #
+    # args = {'class': classes, 'questionBank_subject': questionBank_subject,
+    #         'questionBank_testseries': questionBank_testseries}
+    # return render(request, 'recognition/questionseries.html', args)
+
 
 
 def edit_qp(request):
