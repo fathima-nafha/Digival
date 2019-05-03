@@ -168,6 +168,7 @@ def question(request):
 
 
 def results(request):
+    isEmpty = 1
     questionBank_subject = QuestionPaper.objects.values('qp_subject').distinct()
     questionBank_testseries = QuestionPaper.objects.values('qp_test_series').distinct()
     classes = QuestionPaper.objects.order_by('qp_class').values('qp_class').distinct()
@@ -182,21 +183,21 @@ def results(request):
         if studentmarks == 0:
             args = {'questionBank_subject': questionBank_subject,
                     'questionBank_testseries': questionBank_testseries,
-                    'class': classes, 'isEmpty': 1}
+                    'class': classes, 'isEmpty': isEmpty}
             return render(request, 'recognition/results.html', args)
-
+        isEmpty = 0
         studentmarks = StudentMarks.objects.filter(question_paper__qp_subject=subject,
                                                    question_paper__qp_test_series=testseries,
                                                    question_paper__qp_class=qb_class)
 
         args = {'questionBank_subject': questionBank_subject,
                 'questionBank_testseries': questionBank_testseries,
-                'class': classes, 'student': studentmarks}
+                'class': classes, 'student': studentmarks, 'isEmpty': isEmpty}
         return render(request, 'recognition/results.html', args)
 
     args = {'questionBank_subject': questionBank_subject,
             'questionBank_testseries': questionBank_testseries,
-            'class': classes}
+            'class': classes, 'isEmpty': isEmpty}
     return render(request, 'recognition/results.html', args)
 
 
@@ -213,6 +214,7 @@ def add_student(request):
 
 
 def questionseries(request):
+    isEmpty = 1
     questionBank_subject = QuestionPaper.objects.values('qp_subject').distinct()
     questionBank_testseries = QuestionPaper.objects.values('qp_test_series').distinct()
     classes = QuestionPaper.objects.order_by('qp_class').values('qp_class').distinct()
@@ -226,9 +228,11 @@ def questionseries(request):
         request.session['qb_class'] = qb_class
         questionBank = QuestionBank.objects.filter(qb__qp_class=qb_class, qb__qp_subject=subject,
                                                    qb__qp_test_series=testseries)
+        isEmpty = 0
         args = {'class': classes,
                 'questionBank_subject': questionBank_subject,
                 'questionBank_testseries': questionBank_testseries,
+                'isEmpty': isEmpty,
                 'questionBank': questionBank}
 
         return render(request, 'recognition/questionseries.html', args)
@@ -251,35 +255,8 @@ def questionseries(request):
             return render(request, 'recognition/questionseries.html', args)
 
     args = {'class': classes, 'questionBank_subject': questionBank_subject,
-            'questionBank_testseries': questionBank_testseries}
+            'questionBank_testseries': questionBank_testseries, 'isEmpty': isEmpty}
     return render(request, 'recognition/questionseries.html', args)
-
-
-def save(request):
-    questionBank_subject = QuestionPaper.objects.values('qp_subject').distinct()
-    questionBank_testseries = QuestionPaper.objects.values('qp_test_series').distinct()
-    classes = QuestionPaper.objects.order_by('qp_class').values('qp_class').distinct()
-
-    if request.method == 'POST':
-        # qbClass = request.POST['qbClass']
-        qbAnswer = request.POST['qbAnswer']
-        # qbSubject = request.POST['qbSubject']
-        # qbTest_series = request.POST['qbTest_series']
-        # qb_qno = request.POST['qb_qno']
-        q_id = request.POST['q_id']
-        QuestionBank.objects.filter(q_id = q_id).update(qb_answers = qbAnswer)
-        # args = {'class': classes, 'questionBank_subject': questionBank_subject,
-        #         'questionBank_testseries': questionBank_testseries, 'message': 1}
-        # return redirect(reverse('questionseries'), args)
-    #
-    # args = {'class': classes, 'questionBank_subject': questionBank_subject,
-    #         'questionBank_testseries': questionBank_testseries}
-    # return render(request, 'recognition/questionseries.html', args)
-
-
-
-def edit_qp(request):
-    pass
 
 
 def userprofile(request):

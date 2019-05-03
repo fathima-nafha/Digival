@@ -1,5 +1,6 @@
+
 {% load static %}
-{% load widget_tweaks %}
+
 <html>
    <head>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -44,6 +45,7 @@
       <title></title>
    </head>
    <body style="background-image:url(/static/images/question3.jpg);">
+      {% block content %}
       <h1>Edit Question Paper</h1>
       <div class="container">
          <div class="card">
@@ -72,10 +74,14 @@
             </form>
          </div>
          <div class="limiter">
+
+			{%if isEmpty == 1 %}
+			<h1>No results to display</h1>
+			{% else %}
             <div class="container-table100">
                <div class="wrap-table100">
                   <div class="table100">
-                     <table>
+                     <table id="tbl">
                         <thead>
                            <tr class="table100-head">
                               <th class="column1">Class</th>
@@ -122,6 +128,7 @@
                   </div>
                </div>
             </div>
+            {%endif%}
          </div>
       </div>
 
@@ -177,6 +184,6 @@
       </div>
    </div>
 </div>
-
+   {% endblock %}
    </body>
 </html>

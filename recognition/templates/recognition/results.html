@@ -8,20 +8,17 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/results.css' %}">
 
 </head>
-<body>
-
-	<div class="limiter">
-
-	</div>
+<body style="background-image: url(/static/images/question3.jpg); background-repeat : no-repeat;">
 
 
-	<div class="limiter">
+
+	<div class="container">
 
 		<div id="one">
             <p> RESULTS</p>
 			<hr>
 			</div>
-		<div id="two">
+		<div >
 			<form class='form-class' method="post" enctype="multipart/form-data">
 			{% csrf_token %}
 			<label><b>Choose Subject</b></label>
@@ -43,11 +40,14 @@
     				<option value="{{ entry.qp_class }}">{{ entry.qp_class }}</option>
 				{% endfor %}
 			</select>
-			<hr><center><input type="submit" value='Show Results' name="" id="submitBtn"></center>
+			<hr><center><input type="submit" value='Show Results' name="" id="submitBtn" ></center>
 
 		</form>
 				</div>
-		<div class="container-table100">
+
+	</div>
+	<div class="limiter">
+			<div class="container-table100" id="container-table100">
 
 
 			{%if isEmpty == 1 %}
@@ -55,7 +55,7 @@
 			{% else %}
 			<div class="wrap-table100">
 				<div class="table100">
-					<table>
+					<table id="results">
 						<thead>
 							<tr class="table100-head">
 								<th class="column1">Roll Number</th>

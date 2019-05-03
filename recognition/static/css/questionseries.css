@@ -5,12 +5,6 @@ body{
   background-size: cover;
 	}
 
-body, html {
-
-	font-family: sans-serif;
-}
-
-
 
 
 
@@ -46,6 +40,11 @@ body, html {
 
 
 }
+.limiter {
+  width: 800px;
+  margin: 0 auto;
+}
+
 h1{
  color: white;
  text-align:center;
@@ -85,7 +84,7 @@ select{
   width: 770px;
 }
 
-table {
+#tbl {
   border-spacing: 1;
   border-collapse: collapse;
   background: white;
@@ -95,29 +94,29 @@ table {
   margin: 0 auto;
  }
 
-table td, table th {
+#tbl td, #tbl th {
   padding-left: 8px;
 }
-table thead tr {
+#tbl thead tr {
   height: 60px;
   background: #36304a;
 }
-table tbody tr {
+#tbl tbody tr {
   height: 50px;
 }
-table tbody tr:last-child {
+#tbl tbody tr:last-child {
   border: 0;
 }
-table td, table th {
+#tbl td, #tbl th {
   text-align: left;
 }
-table td.l, table th.l {
+#tbl td.l, #tbl th.l {
   text-align: right;
 }
-table td.c, table th.c {
+#tbl td.c, #tbl th.c {
   text-align: center;
 }
-table td.r, table th.r {
+#tbl td.r, #tbl th.r {
   text-align: center;
 }
 
@@ -150,7 +149,7 @@ tbody tr:hover {
 
 .column1 {
   width: 60px;
-  padding-left: 40px;
+  padding-left: 70px;
 }
 
 .column2 {
@@ -159,31 +158,42 @@ tbody tr:hover {
 
 .column3 {
   width: 60px;
-  padding-right:40px;
+   padding-right: 20px;
+}
+
+.column4 {
+  width: 60px;
+}
+.column5 {
+  width: 60px;
+}
+.column6 {
+  width: 60px;
+    padding-right:40px;
 }
 
 @media screen and (max-width: 992px) {
-  table {
+  #tbl {
     display: block;
   }
-  table > *, table tr, table td, table th {
+  #tbl > *, #tbl tr, #tbl td, #tbl th {
     display: block;
   }
-  table thead {
+  #tbl thead {
     display: none;
   }
-  table tbody tr {
+  #tbl tbody tr {
     height: auto;
     padding: 37px 0;
   }
-  table tbody tr td {
+  #tbl tbody tr td {
     padding-left: 40% !important;
     margin-bottom: 24px;
   }
-  table tbody tr td:last-child {
+  #tbl tbody tr td:last-child {
     margin-bottom: 0;
   }
-  table tbody tr td:before {
+  #tbl tbody tr td:before {
     font-family: OpenSans-Regular;
     font-size: 14px;
     color: #000000;
