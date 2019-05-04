@@ -1,8 +1,8 @@
-from django.shortcuts import render,redirect
-from django.urls import reverse
+from django.shortcuts import render
 from .forms import UploadQuestionBank, RegisterForm, QuestionBankForm
 from .models import QuestionBank, AddStudent, StudentMarks, Student, Teacher, QuestionPaper
 from .recognize import recognize, evaluate_paper
+import xlrd, re, csv, pandas
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth import login as auth_login
@@ -77,7 +77,7 @@ def signup(request):
 
                 # Login the user
                 auth_login(request, user)
-                teacher = Teacher.objects.create(t_name=f_name + l_name, t_email=email)
+                teacher = Teacher.objects.create(t_name=f_name +" "+ l_name, t_email=email)
                 # redirect to accounts page:
                 return render(request, 'recognition/Sign_in.html')
             # return HttpResponseRedirect('recognition/Sign_in.html')
@@ -209,9 +209,6 @@ def homepage(request):
         return render(request, 'recognition/results.html')
 
 
-def add_student(request):
-    return render(request, 'recognition/add_student.html')
-
 
 def questionseries(request):
     isEmpty = 1
@@ -259,8 +256,84 @@ def questionseries(request):
     return render(request, 'recognition/questionseries.html', args)
 
 
+
+
 def userprofile(request):
-    return render(request, 'recognition/userprofile.html')
+    if request.session['t_id']:
+        t_id = request.session['t_id']
+        t = Teacher.objects.get(t_id = t_id)
+        args = {'teacher' : t}
+        print(str(args))
+
+    return render(request, 'recognition/userprofile.html', args)
+
+
+def view_student(request):
+    classes = Student.objects.order_by('s_class').values('s_class').distinct()
+    error = 5
+
+    if request.method == 'POST':
+        if 'class' in request.POST:
+            class1 = request.POST['class']
+            students = Student.objects.filter(s_class = class1).order_by('s_rollno')
+            print(type(students))
+            args = {'class': classes, 'students': students, 'message': error}
+            return render(request, 'recognition/editstudent.html', args)
+
+        if request.FILES:
+            if len(request.FILES) == 0:
+                error = 4
+                args = {'class': classes, 'message': error}
+                return render(request, 'recognition/editstudent.html', args)
+
+            student_list = request.FILES['fileUpload']
+            filename = student_list.name
+
+            if not filename.endswith('.csv'):
+                filename1 = re.split('\.', filename)[0]
+                data_xls = pandas.read_excel(student_list, 'Sheet1', index_col=None)
+                data_xls.to_csv(filename1+'.csv', encoding='utf-8')
+                filename = filename1+'.csv'
+            with open(filename, 'r') as csvFile:
+                try:
+                    read = csv.reader(csvFile)
+                    next(read)
+                    for line in read:
+                        rollno = int(line[1])
+                        name = str(line[2])
+                        class1 = int(line[3])
+                        school = str(line[4])
+                        if Student.objects.filter(s_rollno=rollno, s_class=class1, s_school_name=school).exists():
+                            error = 3
+                            pass
+                        else:
+                            Student.objects.create(s_rollno=rollno, s_name=name, s_class=class1,
+                                                   s_school_name=school)
+                            error = 2
+
+
+                finally:
+                    csvFile.close()
+            args = {'class': classes, 'message': error}
+            return render(request, 'recognition/editstudent.html', args)
+
+        if 'rollno' in request.POST and 'name' in request.POST:
+            s_rollno = request.POST['rollno']
+            s_name = request.POST['name']
+            s_class = request.POST['s_class']
+            s_school = request.POST['school']
+            if Student.objects.filter(s_rollno=s_rollno, s_class=s_class, s_school_name=s_school).exists():
+                error = 1
+                args = {'class': classes,'message': error}
+                return render(request, 'recognition/editstudent.html', args)
+            else:
+                Student.objects.create(s_rollno=s_rollno, s_name=s_name, s_class=s_class, s_school_name=s_school)
+                error = 2
+                args = {'class': classes,'message': error}
+                return render(request, 'recognition/editstudent.html', args)
+
+    args = {'class': classes,'message': error}
+    return  render(request, 'recognition/editstudent.html',args)
 
 
 def sample(request):
