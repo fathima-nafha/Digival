@@ -13,8 +13,6 @@ urlpatterns = [
     url(r'^student/$', views.view_student, name='view_student'),
     url(r'^userprofile/$', views.userprofile, name='userprofile'),
     url(r'^results/$', views.results, name='results'),
-    url(r'x',views.sample),
     url('^$', views.login, name='login'),
-
 ]
 

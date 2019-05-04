@@ -335,6 +335,3 @@ def view_student(request):
     args = {'class': classes,'message': error}
     return  render(request, 'recognition/editstudent.html',args)
 
-
-def sample(request):
-    return render(request, 'recognition/sample.html')
