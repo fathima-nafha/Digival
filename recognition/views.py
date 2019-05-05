@@ -1,11 +1,16 @@
+import csv
+import pandas
+import re
+
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as auth_login
+from django.contrib.auth.models import User
 from django.shortcuts import render
-from .forms import UploadQuestionBank, RegisterForm, QuestionBankForm
+
+from .forms import UploadQuestionBank, RegisterForm
 from .models import QuestionBank, AddStudent, StudentMarks, Student, Teacher, QuestionPaper
 from .recognize import recognize, evaluate_paper
-import xlrd, re, csv, pandas
-from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
-from django.contrib.auth import login as auth_login
+
 
 
 def forgot(request):
@@ -92,12 +97,16 @@ def signup(request):
 
 
 def evaluate(request):
+
+    if not request.session.has_key('t_id'):
+        return login(request)
+
+    t_id = request.session['t_id']
+    teacher = Teacher.objects.get(t_id=t_id)
     questionBank_subject = QuestionPaper.objects.values('qp_subject').distinct()
     questionBank_testseries = QuestionPaper.objects.values('qp_test_series').distinct()
     messages = 0
-    if request.session.has_key('t_id'):
-        t_id = request.session['t_id']
-        teacher = Teacher.objects.get(t_id=t_id)
+
     all_records = Student.objects.all()
     classes = QuestionPaper.objects.order_by('qp_class').values('qp_class').distinct()
     if request.method == 'POST':
@@ -105,7 +114,7 @@ def evaluate(request):
         testseries = request.POST['testseries']
         qb_class = request.POST['class']
         qb_roll = request.POST['s_rollno']
-        student = Student.objects.get(s_rollno=qb_roll)
+        student = Student.objects.get(s_rollno=qb_roll, s_class = qb_roll)
         if len(request.FILES) == 0:
             messages = 2
             return render(request, 'recognition/evaluate.html',
@@ -147,6 +156,9 @@ def evaluate(request):
 
 
 def question(request):
+    if not request.session.has_key('t_id'):
+        return login(request)
+
     if request.method == 'POST':
         form = UploadQuestionBank(request.POST, request.FILES)
         if form.is_valid():
@@ -168,6 +180,8 @@ def question(request):
 
 
 def results(request):
+    if not request.session.has_key('t_id'):
+        return login(request)
     isEmpty = 1
     questionBank_subject = QuestionPaper.objects.values('qp_subject').distinct()
     questionBank_testseries = QuestionPaper.objects.values('qp_test_series').distinct()
@@ -202,15 +216,20 @@ def results(request):
 
 
 def homepage(request):
-    if request.session.has_key('t_id'):
-        t_id = request.session['t_id']
-        return render(request, 'recognition/homepage.html', {"t_id": t_id})
-    else:
-        return render(request, 'recognition/results.html')
 
+    if not request.session.has_key('t_id'):
+        return login(request)
+
+
+    t_id = request.session['t_id']
+    return render(request, 'recognition/homepage.html', {"t_id": t_id})
 
 
 def questionseries(request):
+
+    if not request.session.has_key('t_id'):
+        return login(request)
+
     isEmpty = 1
     questionBank_subject = QuestionPaper.objects.values('qp_subject').distinct()
     questionBank_testseries = QuestionPaper.objects.values('qp_test_series').distinct()
@@ -256,19 +275,22 @@ def questionseries(request):
     return render(request, 'recognition/questionseries.html', args)
 
 
-
-
 def userprofile(request):
-    if request.session['t_id']:
-        t_id = request.session['t_id']
-        t = Teacher.objects.get(t_id = t_id)
-        args = {'teacher' : t}
-        print(str(args))
+    if not request.session.has_key('t_id'):
+        return login(request)
+
+    t_id = request.session['t_id']
+    t = Teacher.objects.get(t_id = t_id)
+    args = {'teacher' : t}
+    print(str(args))
 
     return render(request, 'recognition/userprofile.html', args)
 
 
 def view_student(request):
+    if not request.session.has_key('t_id'):
+        return login(request)
+
     classes = Student.objects.order_by('s_class').values('s_class').distinct()
     error = 5
 
