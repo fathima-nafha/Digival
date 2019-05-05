@@ -60,9 +60,10 @@ button:hover, a:hover {
 
 <div class="card"  style="color:white;">
   <!--img src="/w3images/team2.jpg" alt="John" style="width:100%"--><br>
-  <h1>John Doe</h1>
-  <p class="title">Asst. Prof. St.Joseph Engineering College</p>
-  <p>V.T.University</p>
+  <h1>{{ teacher }}</h1>
+	<input type="text" value="{{ teacher }}" readonly>
+  <p class="title">{{teacher.t_school_name}}</p>
+  <p>{{ teacher.t_email}}</p>
   <div style="margin: 24px 0;">
     <a href="#"><i class="fa fa-dribbble"></i></a> 
     <a href="#"><i class="fa fa-twitter"></i></a>  
@@ -76,7 +77,7 @@ button:hover, a:hover {
 </div>
 
 <div style="text-align: center;">
-<a href="{% url 'recognition:add_student' %}">
+<a href="{% url 'recognition:view_student' %}">
 <button style="background-color:#4caf50;width: 20%;font-family:bold;">EDIT  STUDENT DETAILS</button></a>  &nbsp; &nbsp; &nbsp; &nbsp;
 <a href="{% url 'recognition:qs' %}"><button style="background-color:#4caf50;width: 20%;" >QUESTION SERIES </button></a>
 <br><br>

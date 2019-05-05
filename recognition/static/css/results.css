@@ -6,11 +6,23 @@
 	box-sizing: border-box;
 }
 
+#two{
+
+align: center;
+left : 300px;
+    position:relative;
+    height: 300px;
+    width : 30%;
+
+}
 body, html {
 	height: 100%;
 	font-family: sans-serif;
 }
-
+.container{
+    border-radius : 20px;
+    margin-top : 50px;
+}
 /* ------------------------------------ */
 a {
 	margin: 0px;
@@ -87,19 +99,16 @@ iframe {
 /*//////////////////////////////////////////////////////////////////
 [ Table ]*/
 
-.limiter {
+.limiter, {
   width: 100%;
   margin: 0 auto;
+
 }
 
 .container-table100 {
   width: 100%;
   min-height: 100vh;
-  background: #c850c0;
-  background: -webkit-linear-gradient(45deg, #4158d0, #c850c0);
-  background: -o-linear-gradient(45deg, #4158d0, #c850c0);
-  background: -moz-linear-gradient(45deg, #4158d0, #c850c0);
-  background: linear-gradient(45deg, #4158d0, #c850c0);
+
 
   display: -webkit-box;
   display: -webkit-flex;

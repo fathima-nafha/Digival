@@ -4,7 +4,7 @@ from django.db import models
 
 
 def upload_location(instance,filename):
-    return "%s/%s" %(instance.qp_test_series+instance.qp_subject,filename)
+    return "%s/%s" %(instance.qp_subject+" "+instance.qp_test_series,filename)
 
 
 def upload_location2(instance,filename):
@@ -50,7 +50,7 @@ class QuestionPaper(models.Model):
         unique_together = (('qp_subject', 'qp_test_series', 'qp_class'),)
 
     def __str__(self):
-        return self.qp_subject +" "+ self.qp_test_series
+        return self.qp_subject +" "+self.qp_test_series
 
 
 class QuestionBank(models.Model):

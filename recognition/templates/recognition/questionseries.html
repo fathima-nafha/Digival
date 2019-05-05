@@ -1,98 +1,190 @@
+
 {% load static %}
 
-
 <html>
-<head>
+   <head>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.5/css/bootstrap-select.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.5/js/bootstrap-select.min.js"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+      <style>
+         #qbSubject, #qbTest_series, #qbClass, #q_id{
+            width: 70px;
+            display : inline;
+         }
+         if({{message}})
+         alert('Sucessfuly Updated!');
+      </style>
+<script>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{% static 'css/questionseries.css' %}">
-<style>
-	body{
-		background-image: url('{{ STATIC_URL }}images/question3.jpg');
-		 height: 100%; 
+   $(document).on("click", ".modalLoginForm", function () {
+
+     var qno = $(this).data('id1');
+     var answer = $(this).data('id2');
+     var class1 = $(this).data('id3');
+     var qbSubject = $(this).data('id4');
+     var test_series = $(this).data('id5');
+     var q_id = $(this).data('id6');
+
+     $(".modal-body #qb_qno").val( qno );
+     $(".modal-body #qbAnswer").val( answer );
+     $(".modal-body #qbClass").val( class1 );
+     $(".modal-body #qbSubject").val( qbSubject );
+     $(".modal-body #qbTest_series").val( test_series );
+     $(".modal-body #q_id").val( q_id );
+     $('#modalLoginForm').modal('show');
+   });
+</script>
+      <link rel="stylesheet" href="{% static 'css/questionseries.css' %}">
+      <style>
+      </style>
+      <title></title>
+   </head>
+   <body style="background-image:url(/static/images/question3.jpg);">
+      {% block content %}
+      <h1>Edit Question Paper</h1>
+      <div class="container">
+         <div class="card">
+            <form action="" method="post">
+               {% csrf_token %}
+               <label>Choose the Class</label>
+               <select class="selectpicker" data-style="btn-info" multiple data-max-options="2" name="class">
+                  {% for entry in class %}
+                  <option value="{{ entry.qp_class }}">{{ entry.qp_class }}</option>
+                  {% endfor %}
+               </select>
+               <label>Choose the Subject</label>
+               <select class="selectpicker" data-style="btn-info" multiple data-max-options="2" name="subject">
+                  {% for entry in questionBank_subject %}
+                  <option value="{{ entry.qp_subject }}">{{ entry.qp_subject }}</option>
+                  {% endfor %}
+               </select>
+               <label>Choose the Test Series</label>
+               <select class="selectpicker" data-style="btn-info" multiple data-max-options="2" name="testseries">
+                  {% for entry in questionBank_testseries %}
+                  <option value="{{ entry.qp_test_series }}">{{ entry.qp_test_series }}</option>
+                  {% endfor %}
+               </select>
+               <br><br>
+               <input type="submit" ><br><br>
+            </form>
+         </div>
+         <div class="limiter">
+
+			{%if isEmpty == 1 %}
+			<h1>No results to display</h1>
+			{% else %}
+            <div class="container-table100">
+               <div class="wrap-table100">
+                  <div class="table100">
+                     <table id="tbl">
+                        <thead>
+                           <tr class="table100-head">
+                              <th class="column1">Class</th>
+                              <th class="column2">Subject</th>
+                              <th class="column3">Test Series</th>
+                              <th class="column4">Question Number</th>
+                              <th class="column5">Answer</th>
+                              <th class="column6"></th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           {% for everyRecord in questionBank %}
+                           <tr>
+                              <td class="column1">{{ everyRecord.qb.qp_class }}</td>
+                              <td class="column2">{{ everyRecord.qb.qp_subject }}</td>
+                              <td class="column3">{{ everyRecord.qb.qp_test_series}}</td>
+                              <td class="column4">{{ everyRecord.qb_qno }}</td>
+                              <td class="column5">{{ everyRecord.qb_answers }}</td>
+
+                              <td class="column6">
+                        <div class="text-center">
+                           <button type="button" class="modalLoginForm btn btn-sm btn-primary"
+                                   data-id1="{{everyRecord.qb_qno}}"
+                                   data-id2="{{everyRecord.qb_answers}}"
+                                   data-id3="{{everyRecord.qb.qp_class}}"
+                                   data-id4="{{everyRecord.qb.qp_subject}}"
+                                   data-id5="{{everyRecord.qb.qp_test_series}}"
+                                   data-id6="{{everyRecord.q_id}}"
+                                   data-toggle="modal" data-target="#modalLoginForm">
+
+                              <span class="fa fa-pencil"></span>
+                        </button>
+
+                        </div>
 
 
 
-  background-repeat: no-repeat;
-  background-size: cover;
-	}
+                              </td>
+                              <!--<td class="column3"><input type="submit" value="Edit" name="Edit" onclick=""></td>-->
+                           </tr>
+                           {% endfor %}
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+            </div>
+            {%endif%}
+         </div>
+      </div>
 
-.card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-  max-width: 370px;
+   <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content ">
+         <div class="modal-header text-center">
+            <h4 class="modal-title w-100 font-weight-bold">Edit Answer</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <form method="post" enctype="multipart/form-data" action="">
+               {% csrf_token %}
+         <div class="modal-body mx-3">
+            <div class="md-form mb-5">
+               <label data-error="wrong" data-success="right" for="q_id">Question Number ID</label>
+               <input type="text" name="q_id" id="q_id" class="form-control validate" readonly>
+            </div>
+            <div class="md-form mb-5">
+               <label data-error="wrong" data-success="right" for="qbClass">Class</label>
+               <input type="text" name="qbClass" id="qbClass" class="form-control validate" readonly>
+            </div>
+            <div class="md-form mb-5">
+               <label data-error="wrong" data-success="right" for="qbSubject">Subject</label>
 
-  margin: auto;
-  text-align: center;
-  font-family: arial;
-  background-color: white;
-}
-input[type=submit]{
-  background-color:black;
-  color: white;
-  outline-color:
-  black;width:150px;
-  margin-left:100px;
-  padding: 15px;
-}
-input[type=submit]:hover{
- cursor:pointer;
- }
-</style>
-	<title></title>
-</head>
-<body style="background-image:url(/static/images/question3.jpg);">
 
-<div class="card">
-  <!--img src="/w3images/team2.jpg" alt="John" style="width:100%"--><br>
-  <h2 style="color: maroon;">Choose the Question Series</h2>
- 
-  
-  <div style="margin: 24px 0;">
-    <form action="" method="post">
-      {% csrf_token %}
-  <select name="q_series">
-    {% for entry in qp_series %}
-      <option value="{{ entry.qp_series }}">{{ entry.qp_series }}</option>
-    {% endfor %}
-  </select>
-  <br><br>
-  <input type="submit" ><br><br>
-</form>
+               <input type="text" name="qbSubject" id="qbSubject" class="form-control validate" readonly>
+            </div>
+            <div class="md-form mb-5">
+               <label data-error="wrong" data-success="right" for="qbTest_series">Test Series</label>
 
-  </div>
+
+               <input type="text" name="qbTest_series" id="qbTest_series" class="form-control validate" readonly>
+            </div>
+            <div class="md-form mb-5">
+               <label data-error="wrong" data-success="right" for="qb_qno">Question Number</label>
+
+
+               <input type="text" name="qb_qno" id="qb_qno" class="form-control validate">
+            </div>
+            <div class="md-form mb-4">
+               <label data-error="wrong" data-success="right" for="qbAnswer">Answer</label>
+
+               <input type="text" name="qbAnswer" id="qbAnswer" class="form-control validate">
+            </div>
+
+         </div>
+         <div class="modal-footer d-flex justify-content-center">
+            <button class="btn btn-default btn-success"  >Save</button>
+         </div>
+         </form>
+      </div>
+   </div>
 </div>
-
-	<div class="limiter">
-
-		<div class="container-table100">
-			<div class="wrap-table100">
-				<div class="table100">
-					<table>
-						<thead>
-							<tr class="table100-head">
-								<th class="column1">Question Number</th>
-								<th class="column2">Answer</th>
-								<th class="column3"></th>
-							</tr>
-						</thead>
-						<tbody>
-                                {% for everyRecord in qb %}
-								<tr>
-									<td class="column1">{{ everyRecord.qb_qno }}</td>
-									<td class="column2">{{ everyRecord.qb_answers }}</td>
-									<!--<td class="column3"><input type="submit" value="Edit" name="Edit" onclick=""></td>-->
-								</tr>
-                                {% endfor %}
-
-						</tbody>
-
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
-
-</body>
-
-
+   {% endblock %}
+   </body>
 </html>

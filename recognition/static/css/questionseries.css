@@ -1,86 +1,9 @@
 /*//////////////////////////////////////////////////////////////////
 [ RESTYLE TAG ]*/
-* {
-	margin: 0px; 
-	padding: 0px; 
-	box-sizing: border-box;
-}
-
-body, html {
-	height: 100%;
-	font-family: sans-serif;
-}
-
-/* ------------------------------------ */
-a {
-	margin: 0px;
-	transition: all 0.4s;
-	-webkit-transition: all 0.4s;
-  -o-transition: all 0.4s;
-  -moz-transition: all 0.4s;
-}
-
-a:focus {
-	outline: none !important;
-}
-
-a:hover {
-	text-decoration: none;
-}
-
-
-/* ------------------------------------ */
-p{
-  font-size:75px;
-  text-align: center;
-
-
-
-}
-ul, li {
-	margin: 0px;
-	list-style-type: none;
-}
-
-
-/* ------------------------------------ */
-input {
-  display: block;
-	outline: none;
-	border: none !important;
-}
-
-textarea {
-  display: block;
-  outline: none;
-}
-
-textarea:focus, input:focus {
-  border-color: transparent !important;
-}
-
-/* ------------------------------------ */
-button {
-	outline: none !important;
-	border: none;
-	background: transparent;
-}
-
-button:hover {
-	cursor: pointer;
-}
-
-iframe {
-	border: none !important;
-}
-
-
-
-
-/*//////////////////////////////////////////////////////////////////
-[ Utiliti ]*/
-
-
+body{
+  background-repeat: no-repeat;
+  background-size: cover;
+	}
 
 
 
@@ -88,29 +11,80 @@ iframe {
 /*//////////////////////////////////////////////////////////////////
 [ Table ]*/
 
-.limiter {
-  width: 100%;
-  margin: 0 auto;
-}
 
 .container-table100 {
   width: 100%;
   min-height: 100vh;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: flex;
+  margin-top: 40px;
   align-items: center;
   justify-content: center;
 
 }
+.container{
+   margin : 0 auto;
+}
+
+.card {
+
+  margin : 0 auto;
+  padding: 50px 40px 50px 50px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+  max-width : 350px;
+
+  margin-top: 30px;
+
+  font-family: arial;
+  background-color: white;
+ align-items: center;
+
+
+}
+.limiter {
+  width: 800px;
+  margin: 0 auto;
+}
+
+h1{
+ color: white;
+ text-align:center;
+}
+label{
+   padding: 10px 10px 5px 0px;
+   margin: 5px 5px 5px 0px;
+}
+select .dropdown-toggle{
+    width: 250px;
+
+}
+input[type=submit]{
+  background-color:black;
+  color: white;
+  outline-color:black;
+  width:150px;
+  margin-top: 10px;
+ margin-left: 40px;
+  padding: 15px;
+  cursor:pointer;
+}
+select{
+   display : inline;
+   margin : 24px 0;
+   position : absolute;
+   min-width : 175px;
+ }
+ p{
+ 	font-size : 20px;
+ 	font-weight: bold;
+ 	color : maroon;
+ 	position : relative;
+ }
 
 .wrap-table100 {
   width: 770px;
 }
 
-table {
+#tbl {
   border-spacing: 1;
   border-collapse: collapse;
   background: white;
@@ -120,29 +94,29 @@ table {
   margin: 0 auto;
  }
 
-table td, table th {
+#tbl td, #tbl th {
   padding-left: 8px;
 }
-table thead tr {
+#tbl thead tr {
   height: 60px;
   background: #36304a;
 }
-table tbody tr {
+#tbl tbody tr {
   height: 50px;
 }
-table tbody tr:last-child {
+#tbl tbody tr:last-child {
   border: 0;
 }
-table td, table th {
+#tbl td, #tbl th {
   text-align: left;
 }
-table td.l, table th.l {
+#tbl td.l, #tbl th.l {
   text-align: right;
 }
-table td.c, table th.c {
+#tbl td.c, #tbl th.c {
   text-align: center;
 }
-table td.r, table th.r {
+#tbl td.r, #tbl th.r {
   text-align: center;
 }
 
@@ -175,7 +149,7 @@ tbody tr:hover {
 
 .column1 {
   width: 60px;
-  padding-left: 40px;
+  padding-left: 70px;
 }
 
 .column2 {
@@ -184,31 +158,42 @@ tbody tr:hover {
 
 .column3 {
   width: 60px;
-  padding-right:40px;
+   padding-right: 20px;
+}
+
+.column4 {
+  width: 60px;
+}
+.column5 {
+  width: 60px;
+}
+.column6 {
+  width: 60px;
+    padding-right:40px;
 }
 
 @media screen and (max-width: 992px) {
-  table {
+  #tbl {
     display: block;
   }
-  table > *, table tr, table td, table th {
+  #tbl > *, #tbl tr, #tbl td, #tbl th {
     display: block;
   }
-  table thead {
+  #tbl thead {
     display: none;
   }
-  table tbody tr {
+  #tbl tbody tr {
     height: auto;
     padding: 37px 0;
   }
-  table tbody tr td {
+  #tbl tbody tr td {
     padding-left: 40% !important;
     margin-bottom: 24px;
   }
-  table tbody tr td:last-child {
+  #tbl tbody tr td:last-child {
     margin-bottom: 0;
   }
-  table tbody tr td:before {
+  #tbl tbody tr td:before {
     font-family: OpenSans-Regular;
     font-size: 14px;
     color: #000000;
