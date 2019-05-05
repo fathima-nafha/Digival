@@ -1,19 +1,17 @@
+import csv
+import pandas
+import re
+
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as auth_login
+from django.contrib.auth.models import User
 from django.shortcuts import render
+
 from .forms import UploadQuestionBank, RegisterForm
-from .models import QuestionBank, AddStudent, StudentMarks, Student, Teacher, QuestionPaper
-from django.shortcuts import render, render_to_response, redirect
-from django.template import RequestContext
-from .forms import RegisterForm,  UploadQuestionBank
-from .models import QuestionBank,AddStudent, Student,Teacher,QuestionPaper, AddQuestionBank
-from django.shortcuts import render
-from .forms import UploadQuestionBank, RegisterForm
+from .models import AddQuestionBank
 from .models import QuestionBank, AddStudent, StudentMarks, Student, Teacher, QuestionPaper
 from .recognize import recognize, evaluate_paper
-import xlrd, re, csv, pandas
-from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
-from django.contrib.auth import login as auth_login
-from .import forms
+
 
 # Create your views here.
 
@@ -21,14 +19,6 @@ from .import forms
 
 def forgot(request):
     return render(request, 'recognition/forgotpassword.html')
-
-
-# class BookUpdateView(BSModalUpdateView):
-#     model = QuestionBank
-#     template_name = 'recognition/update_qb.html'
-#     form_class = QuestionBankForm
-#     success_message = 'Success: Book was updated.'
-#     success_url = reverse_lazy('homepage')
 
 
 def login(request):
@@ -111,6 +101,12 @@ def signup(request):
 
 
 def evaluate(request):
+
+    if not request.session.has_key('t_id'):
+        return login(request)
+
+    t_id = request.session['t_id']
+    teacher = Teacher.objects.get(t_id=t_id)
     questionBank_subject = QuestionPaper.objects.values('qp_subject').distinct()
     questionBank_testseries = QuestionPaper.objects.values('qp_test_series').distinct()
     messages = 0
@@ -124,7 +120,7 @@ def evaluate(request):
         testseries = request.POST['testseries']
         qb_class = request.POST['class']
         qb_roll = request.POST['s_rollno']
-        student = Student.objects.get(s_rollno=qb_roll)
+        student = Student.objects.get(s_rollno=qb_roll, s_class = qb_roll)
         if len(request.FILES) == 0:
             messages = 2
             return render(request, 'recognition/evaluate.html',
@@ -166,6 +162,9 @@ def evaluate(request):
 
 
 def question(request):
+    if not request.session.has_key('t_id'):
+        return login(request)
+
     if request.method == 'POST':
        form=UploadQuestionBank(request.POST,request.FILES)
        if form.is_valid():
@@ -221,6 +220,8 @@ def answerkeys(request):
 
 
 def results(request):
+    if not request.session.has_key('t_id'):
+        return login(request)
     isEmpty = 1
     questionBank_subject = QuestionPaper.objects.values('qp_subject').distinct()
     questionBank_testseries = QuestionPaper.objects.values('qp_test_series').distinct()
@@ -254,21 +255,20 @@ def results(request):
     return render(request, 'recognition/results.html', args)
 
 
-    args = {'questionBank_subject': questionBank_subject,
-            'questionBank_testseries': questionBank_testseries,
-            'class': classes, 'isEmpty': isEmpty}
-    return render(request, 'recognition/results.html', args)
-
-
 def homepage(request):
-    if request.session.has_key('t_id'):
-        t_id = request.session['t_id']
-        return render(request, 'recognition/homepage.html', {"t_id": t_id})
-    else:
-        return render(request, 'recognition/results.html')
 
+    if not request.session.has_key('t_id'):
+        return login(request)
+
+
+    t_id = request.session['t_id']
+    return render(request, 'recognition/homepage.html', {"t_id": t_id})
 
 def questionseries(request):
+
+    if not request.session.has_key('t_id'):
+        return login(request)
+
     isEmpty = 1
     questionBank_subject = QuestionPaper.objects.values('qp_subject').distinct()
     questionBank_testseries = QuestionPaper.objects.values('qp_test_series').distinct()
@@ -313,37 +313,24 @@ def questionseries(request):
             'questionBank_testseries': questionBank_testseries, 'isEmpty': isEmpty}
     return render(request, 'recognition/questionseries.html', args)
 
-    if 'rollno' in request.POST and 'name' in request.POST:
-        s_rollno = request.POST['rollno']
-        s_name = request.POST['name']
-        s_class = request.POST['s_class']
-        s_school = request.POST['school']
-        if Student.objects.filter(s_rollno=s_rollno, s_class=s_class, s_school_name=s_school).exists():
-            error = 1
-            args = {'class': classes,'message': error}
-            return render(request, 'recognition/editstudent.html', args)
-        else:
-            Student.objects.create(s_rollno=s_rollno, s_name=s_name, s_class=s_class, s_school_name=s_school)
-            error = 2
-            args = {'class': classes,'message': error}
-            return render(request, 'recognition/editstudent.html', args)
-
-    args = {'class': classes,'message': error}
-    return  render(request, 'recognition/editstudent.html',args)
-
 
 
 def userprofile(request):
-    if request.session['t_id']:
-        t_id = request.session['t_id']
-        t = Teacher.objects.get(t_id = t_id)
-        args = {'teacher' : t}
-        print(str(args))
+    if not request.session.has_key('t_id'):
+        return login(request)
+
+    t_id = request.session['t_id']
+    t = Teacher.objects.get(t_id = t_id)
+    args = {'teacher' : t}
+    print(str(args))
 
     return render(request, 'recognition/userprofile.html', args)
 
 
 def view_student(request):
+    if not request.session.has_key('t_id'):
+        return login(request)
+
     classes = Student.objects.order_by('s_class').values('s_class').distinct()
     error = 5
 
@@ -409,6 +396,4 @@ def view_student(request):
 
     args = {'class': classes,'message': error}
     return  render(request, 'recognition/editstudent.html',args)
-
-
 
