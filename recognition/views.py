@@ -1,9 +1,12 @@
+from django.shortcuts import render
+from .forms import UploadQuestionBank, RegisterForm
+from .models import QuestionBank, AddStudent, StudentMarks, Student, Teacher, QuestionPaper
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
 from .forms import RegisterForm,  UploadQuestionBank
 from .models import QuestionBank,AddStudent, Student,Teacher,QuestionPaper, AddQuestionBank
 from django.shortcuts import render
-from .forms import UploadQuestionBank, RegisterForm, QuestionBankForm
+from .forms import UploadQuestionBank, RegisterForm
 from .models import QuestionBank, AddStudent, StudentMarks, Student, Teacher, QuestionPaper
 from .recognize import recognize, evaluate_paper
 import xlrd, re, csv, pandas
@@ -18,6 +21,14 @@ from .import forms
 
 def forgot(request):
     return render(request, 'recognition/forgotpassword.html')
+
+
+# class BookUpdateView(BSModalUpdateView):
+#     model = QuestionBank
+#     template_name = 'recognition/update_qb.html'
+#     form_class = QuestionBankForm
+#     success_message = 'Success: Book was updated.'
+#     success_url = reverse_lazy('homepage')
 
 
 def login(request):
@@ -243,13 +254,18 @@ def results(request):
     return render(request, 'recognition/results.html', args)
 
 
+    args = {'questionBank_subject': questionBank_subject,
+            'questionBank_testseries': questionBank_testseries,
+            'class': classes, 'isEmpty': isEmpty}
+    return render(request, 'recognition/results.html', args)
+
+
 def homepage(request):
     if request.session.has_key('t_id'):
         t_id = request.session['t_id']
         return render(request, 'recognition/homepage.html', {"t_id": t_id})
     else:
         return render(request, 'recognition/results.html')
-
 
 
 def questionseries(request):
@@ -297,6 +313,23 @@ def questionseries(request):
             'questionBank_testseries': questionBank_testseries, 'isEmpty': isEmpty}
     return render(request, 'recognition/questionseries.html', args)
 
+    if 'rollno' in request.POST and 'name' in request.POST:
+        s_rollno = request.POST['rollno']
+        s_name = request.POST['name']
+        s_class = request.POST['s_class']
+        s_school = request.POST['school']
+        if Student.objects.filter(s_rollno=s_rollno, s_class=s_class, s_school_name=s_school).exists():
+            error = 1
+            args = {'class': classes,'message': error}
+            return render(request, 'recognition/editstudent.html', args)
+        else:
+            Student.objects.create(s_rollno=s_rollno, s_name=s_name, s_class=s_class, s_school_name=s_school)
+            error = 2
+            args = {'class': classes,'message': error}
+            return render(request, 'recognition/editstudent.html', args)
+
+    args = {'class': classes,'message': error}
+    return  render(request, 'recognition/editstudent.html',args)
 
 
 

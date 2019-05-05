@@ -91,7 +91,7 @@ class AddQuestionBank(models.Model):
         return  self.teacher.t_name
 
 
-class StudentMark(models.Model):
+class StudentMarks(models.Model):
     question_paper = models.ForeignKey(QuestionPaper, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     marks = models.IntegerField(default=0, null=True)
