@@ -3,7 +3,33 @@
 <head>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.5/css/bootstrap-select.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+<script>
+
+   $(document).on("click", ".modalLoginForm", function () {
+
+     var t_name = $(this).data('id1');
+     var t_school = $(this).data('id2');
+     var t_email = $(this).data('id3');
+
+
+     $(".modal-body #t_name").val( t_name );
+     $(".modal-body #t_school_name").val( t_school );
+     $(".modal-body #t_email").val( t_email );
+
+     $('#modalLoginForm').modal('show');
+   });
+
+
+</script>
 <style>
+
 /*body{
   background-image: url("images/question1.jpg");
 }*/
@@ -61,7 +87,7 @@ button:hover, a:hover {
 <div class="card"  style="color:white;">
   <!--img src="/w3images/team2.jpg" alt="John" style="width:100%"--><br>
   <h1>{{ teacher }}</h1>
-	<input type="text" value="{{ teacher }}" readonly>
+
   <p class="title">{{teacher.t_school_name}}</p>
   <p>{{ teacher.t_email}}</p>
   <div style="margin: 24px 0;">
@@ -71,8 +97,10 @@ button:hover, a:hover {
     <a href="#"><i class="fa fa-facebook"></i></a> 
   </div>
   <div>
-  <p><button style=" width:100%;">Edit</button>
-  <button style=" width:100%;">Save</button></p>
+	  <button type="button" class="modalLoginForm btn btn-sm" style=" width:100%;"
+                                   data-id1="{{teacher}}" data-id2="{{teacher.t_school_name}}" data-id3="{{teacher.t_email}}" data-toggle="modal"
+                                   data-target="#modalLoginForm">Edit</button>
+
 </div>
 </div>
 
@@ -105,5 +133,40 @@ button:hover, a:hover {
 			</p>
 		</p>
 	</footer>
+
+<div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content ">
+         <div class="modal-header text-center">
+            <h4 class="modal-title w-100 font-weight-bold">Edit Your details</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <form method="post" enctype="multipart/form-data" action="">
+               {% csrf_token %}
+         <div class="modal-body mx-3">
+            <div class="md-form mb-5">
+               <label data-error="wrong" data-success="right" for="t_name">Name</label>
+               <input type="text" name="t_name" id="t_name" class="form-control validate" >
+            </div>
+            <div class="md-form mb-5">
+               <label data-error="wrong" data-success="right" for="t_school_name">School Name</label>
+               <input type="text" name="t_school_name" id="t_school_name" class="form-control validate" >
+            </div>
+            <div class="md-form mb-5">
+               <label data-error="wrong" data-success="right" for="t_email">E-mail</label>
+				<input type="text" name="t_email" id="t_email" class="form-control validate" readonly>
+            </div>
+
+         <div class="modal-footer d-flex justify-content-center">
+            <button class="btn btn-default btn-success" onclick="location.reload();" >Save</button>
+         </div>
+		 </div>
+         </form>
+      </div>
+   </div>
+</div>
+
 </body>
 </html>

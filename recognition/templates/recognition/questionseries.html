@@ -39,6 +39,12 @@
      $(".modal-body #q_id").val( q_id );
      $('#modalLoginForm').modal('show');
    });
+
+
+   function preventBack(){window.history.forward();}
+    setTimeout("preventBack()", 0);
+    window.onunload=function(){null};
+
 </script>
       <link rel="stylesheet" href="{% static 'css/questionseries.css' %}">
       <style>
@@ -73,7 +79,7 @@
                <br><br>
                <input type="submit" ><br><br>
             </form>
-            <center><a class="btn" href="{% url 'recognition:homepage' %}"><button id="backBtn">Back</button></a> </center>
+            <center><a class="btn" href="{% url 'recognition:userprofile' %}"><button id="backBtn">Back</button></a> </center>
 
          </div>
          <div class="limiter">
