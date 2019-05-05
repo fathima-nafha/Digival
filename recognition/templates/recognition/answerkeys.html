@@ -1,0 +1,109 @@
+{% load static %}
+
+<html>
+<head>
+	<title>Digival</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/sign.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$(".addRow").click(function(){
+            	var num = $("#number").val();
+            	var rowCount = $('#questions tr').length;
+            	if (num == null || num == '')
+            	{
+					alert("Enter Number of Questions");
+            	}
+            	else if(rowCount == num)
+            	{
+            		alert("Total number of Questions entered is "+num);
+            	}
+            	else
+            	{
+            		var markup = "<tr><td>Question Number</td><td><input type='text' name='qnum[]' required></td><td>Answer</td><td><input type='text' name='ans[]' required ></td></tr>";
+            		$("#questions").append(markup);
+            	}
+        	});
+
+
+        	$("#submitBtn").click(function(){
+        		var ques = $('input[name="qnum[]"]').map(function () {
+    					return this.value; // $(this).val()
+					}).get();
+
+        		var ans = $('input[name="ans[]"]').map(function () {
+    					return this.value; // $(this).val()
+					}).get();
+
+				var num = $("#number").val();
+
+        		$.ajax({
+        			type: 'POST',
+        			url: '/answerkeys/',
+        			data: {'csrfmiddlewaretoken': '{{ csrf_token }}','ques[]': ques ,'ans[]': ans, 'num': num},
+    			});
+        	});
+        });
+	</script>
+</head>
+<body>
+<header>
+		<table width='100%'>
+			<tr>
+				<td style="color: white;"><p><h1 class='h'>DIGIVAL</h1>
+					<h3 class='h'>An Automated Evaluation System</h3></p></td>
+					<td width="150px">
+						<a href="{% url 'recognition:login' %}" id="logout">
+						<table cellspacing="10pt">
+						<tr>
+							<td><img src="{% static 'images/user.png' %}" id='user'></td>
+							<td><h2 style="color: white;" align="center">Logout</h2></td>
+						</tr></table></a>
+					</td>
+			</tr>
+		</table>
+	</header>
+<br><br>
+	<div class="container">
+		<form method="post">
+			{% csrf_token %}
+		<h1>Enter Answer Keys</h1><hr>
+			<label><b>Enter Number of Questions</b></label>
+			<input type="text" name="number" id="number" required="">
+
+			<hr>
+			<label><b>Enter Answer Keys</b></label> &nbsp;&nbsp;
+			<input type="button" value='Add Answer' class="addRow">
+		<div>
+			<table id='questions' cellspacing="20">
+
+			</table>
+		</div>
+		<hr><center><input type="submit" value='Submit' name="" id="submitBtn"></center>
+	</form>
+	</div>
+<footer>
+		<hr>
+		<p>
+			<b>Contact Information</b>
+			<table cellspacing="10px">
+				<tr>
+					<td><img src="{% static 'images/phone.png' %}" class='headfoot'></td>
+					<td>+91 9876543210</td>
+				</tr>
+				<tr>
+					<td><img src="{% static 'images/email.png' %}" class="headfoot"></td>
+					<td>queries@digival.com</td>
+				</tr>
+			</table>
+
+			<p style="background-color: black; color: white;" align="center">
+				&copy Copyright All Rights Reserved | Designed By Digival
+			</p>
+		</p>
+	</footer>
+</body>
+</html>
