@@ -67,6 +67,15 @@ input[type=submit]{
   padding: 15px;
   cursor:pointer;
 }
+#backBtn{
+  background-color:black;
+  color: white;
+  outline-color:black;
+  width:150px;
+
+  padding: 15px;
+  cursor:pointer;
+}
 select{
    display : inline;
    margin : 24px 0;
