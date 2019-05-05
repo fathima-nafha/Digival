@@ -5,43 +5,6 @@
 	<title>Digival</title>
 	<link rel="stylesheet" type="text/css" href="{% static 'css/sign.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
-	<script type="text/javascript">
-		function addRow(tableID)
-		{
-			var table = document.getElementById('questions');
-			var num = document.getElementById('number').value;
-			var rowCount = table.rows.length;
-
-			if(!num){
-				alert('Enter number of Questions');
-			}
-			else if(num==rowCount){
-				alert("Total number of Questions entered is "+num);
-			}
-			else{
-				var row = table.insertRow(rowCount);
-
-				var cell1 = row.insertCell(0);
-				cell1.innerHTML = "Question Number";
-
-				var cell2 = row.insertCell(1);
-				var element1 = document.createElement("input");
-				element1.type = "text";
-				element1.name="qnum[]";
-				cell2.appendChild(element1);
-
-				var cell3 = row.insertCell(2);
-				cell3.innerHTML = "Answer"
-
-				var cell4 = row.insertCell(3);
-				var element2 = document.createElement("input");
-				element2.type = "text";
-				element2.name="ans[]";
-				cell4.appendChild(element2);
-			}
-			
-		}	
-	</script>
 </head>
 <body>
 <header>
@@ -62,31 +25,37 @@
 	</header>
 <br><br>
 	<div class="container">
-		<h1>Upload Question Bank</h1><hr>
-		<form enctype="multipart/form-data" method="post">
-			{% csrf_token %}
+		<h1>Upload Question Paper</h1><hr>
+       <form action="{% url 'recognition:question' %}" enctype="multipart/form-data" method="post" >
+		   {% csrf_token %}
+		   {% if error_message %}
+		   <p align="center" style="color:red;">{{ error_message }}</p>
+		   {% endif %}
+			<label><b>Enter Subject</b></label>
+			<select name="qp_subject">
+				<option value="eng">English</option>
+				<option value="gk">GK</option>
+				<option value="evs">EVS</option>
+			</select>
+
+			<label><b>Enter Test Series</b></label>
+			<select name="qp_test_series">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+			</select>
+
 			<label><b>Enter Class</b></label>
-			<input type="number" id="class" name="class" value='' required="">
+			<input type="text" name="qp_class" id="cls" value='' required="">
 
-			<label><b>Enter Question paper Series</b></label>
-			<input type="text" name="qseries" id="qseries" value='' required="">
-
-			<label><b>Enter Number of Questions</b></label>
-			<input type="text" name="number" value='' id="number" required="">
 
 			<p><label><b>Upload Question Paper</b></label></p>
-			<p><input type="file" name="ques" accept="image/*"></p>
-			<hr>
-			<label><b>Enter Answer Keys</b></label> &nbsp;&nbsp;
-			<input type="button" value='Add Answer' onclick="addRow()" class="addRow">
-		<div>
-			<table id='questions' cellspacing="20">
+			<p><input id = "answer" type="file" name="question_paper" accept="image/*" required></p>
+            <hr>
 
-			</table>
-		</div>
-		<hr><center><input type="submit" value='Submit' name="" id="submitBtn"></center>
-		</form>
-	</div>
+		    <input type="submit" value='Next' name = 'Next' id="submitBtn"/>
+        </form>
+    </div>
 <footer>
 		<hr>
 		<p>

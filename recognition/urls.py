@@ -13,6 +13,8 @@ urlpatterns = [
     url(r'^student/$', views.view_student, name='view_student'),
     url(r'^userprofile/$', views.userprofile, name='userprofile'),
     url(r'^results/$', views.results, name='results'),
+    url(r'^answerkeys/$',views.answerkeys, name='answerkeys'),
+    #url(r'^reset-password', views.ResetPasswordRequestView, name="reset_password"),
     url('^$', views.login, name='login'),
 ]
 

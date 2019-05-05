@@ -1,5 +1,5 @@
 from django import forms
-from bootstrap_modal_forms.forms import BSModalForm
+from . import models
 from .models import QuestionBank
 
 class RegisterForm(forms.Form):
@@ -13,16 +13,15 @@ class RegisterForm(forms.Form):
 
 
 class UploadQuestionBank(forms.Form):
-    qb_class = forms.IntegerField(label="class1")
-    qb_series = forms.CharField(label="qseries", max_length=2)
-    qb_qno = forms.IntegerField(label="number")
-    question_paper = forms.ImageField(label="question-paper")
+    qp_subject=forms.CharField()
+    qp_test_series=forms.IntegerField()
+    qp_class=forms.IntegerField()
+    question_paper=forms.ImageField()
 
 
-class QuestionBankForm(BSModalForm):
-    class Meta:
-        model = QuestionBank
-        exclude = ['qb']
+
+
+
 
 
 

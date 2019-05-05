@@ -8,8 +8,12 @@ from django.contrib.auth.models import User
 from django.shortcuts import render
 
 from .forms import UploadQuestionBank, RegisterForm
+from .models import AddQuestionBank
 from .models import QuestionBank, AddStudent, StudentMarks, Student, Teacher, QuestionPaper
 from .recognize import recognize, evaluate_paper
+
+
+# Create your views here.
 
 
 
@@ -106,7 +110,9 @@ def evaluate(request):
     questionBank_subject = QuestionPaper.objects.values('qp_subject').distinct()
     questionBank_testseries = QuestionPaper.objects.values('qp_test_series').distinct()
     messages = 0
-
+    if request.session.has_key('t_id'):
+        t_id = request.session['t_id']
+        teacher = Teacher.objects.get(t_id=t_id)
     all_records = Student.objects.all()
     classes = QuestionPaper.objects.order_by('qp_class').values('qp_class').distinct()
     if request.method == 'POST':
@@ -160,23 +166,57 @@ def question(request):
         return login(request)
 
     if request.method == 'POST':
-        form = UploadQuestionBank(request.POST, request.FILES)
-        if form.is_valid():
-            class1 = form.cleaned_data['class1']
-            qseries = form.cleaned_data['qseries']
-            number = form.cleaned_data['number']
-            question_paper = form.cleaned_data['question_paper']
-            args = {'class1': class1, 'qseries': qseries, 'number': number, 'qp': question_paper}
+       form=UploadQuestionBank(request.POST,request.FILES)
+       if form.is_valid():
+           qp_subject = request.POST['qp_subject']
+           qp_test_series = request.POST['qp_test_series']
+           qp_class = request.POST['qp_class']
+           question_paper = request.FILES['question_paper']
+           if QuestionPaper.objects.filter(qp_subject=qp_subject, qp_class=qp_class, qp_test_series=qp_test_series).exists():
+               return render(request, 'recognition/question.html' , {
+                   'form': form,
+                   'error_message': 'Question Paper Already Exists!!'
+                })
+           else:
+                paper = QuestionPaper(qp_subject = qp_subject, qp_test_series= qp_test_series, qp_class=qp_class, question_paper= question_paper)
+                paper.save()
 
-            return render(request, "recognition/success.html", args)
+                qp_id=QuestionPaper.objects.filter(qp_subject = qp_subject, qp_test_series= qp_test_series, qp_class=qp_class).values('qp_id')
+                qp= qp_id[0]['qp_id']
+                request.session['q_id'] = qp
 
-        else:
-            form = UploadQuestionBank()
-            return render(request, "recognition/homepage.html", {'form': form})
+                if request.session.has_key('t_id'):
+                    t_id = request.session['t_id']
+
+                addques = AddQuestionBank()
+                addques.teacher_id=t_id
+                addques.qp_id=qp
+                addques.save()
+                #request.session.save()
+                return render(request, 'recognition/answerkeys.html')
     else:
-        form = UploadQuestionBank()
-        return render(request, "recognition/question.html", {'form': form})
-    # return render(request, 'recognition/question.html')
+        form=UploadQuestionBank()
+    return render(request,'recognition/question.html',{ 'form':form })
+
+def answerkeys(request):
+    if request.method == 'POST':
+        ques = request.POST.getlist('ques[]')
+        ans = request.POST.getlist('ans[]')
+        num = request.POST['num']
+        if request.session.has_key('q_id'):
+            q_id = request.session['q_id']
+
+        for i in range(len(ques)):
+            qb_qno = ques[i]
+            qb_answers = ans[i]
+            q_bank = QuestionBank(qb_qno=qb_qno, qb_answers=qb_answers)
+            q_bank.qb_id = q_id
+            q_bank.save()
+        #print(num)
+        return render(request,'recognition/homepage.html')
+    else:
+        return render(request, 'recognition/answerkeys.html')
+    #return render(request, 'recognition/answerkeys.html')
 
 
 def results(request):
@@ -223,7 +263,6 @@ def homepage(request):
 
     t_id = request.session['t_id']
     return render(request, 'recognition/homepage.html', {"t_id": t_id})
-
 
 def questionseries(request):
 
@@ -274,6 +313,23 @@ def questionseries(request):
             'questionBank_testseries': questionBank_testseries, 'isEmpty': isEmpty}
     return render(request, 'recognition/questionseries.html', args)
 
+    if 'rollno' in request.POST and 'name' in request.POST:
+        s_rollno = request.POST['rollno']
+        s_name = request.POST['name']
+        s_class = request.POST['s_class']
+        s_school = request.POST['school']
+        if Student.objects.filter(s_rollno=s_rollno, s_class=s_class, s_school_name=s_school).exists():
+            error = 1
+            args = {'class': classes,'message': error}
+            return render(request, 'recognition/editstudent.html', args)
+        else:
+            Student.objects.create(s_rollno=s_rollno, s_name=s_name, s_class=s_class, s_school_name=s_school)
+            error = 2
+            args = {'class': classes,'message': error}
+            return render(request, 'recognition/editstudent.html', args)
+
+    args = {'class': classes,'message': error}
+    return  render(request, 'recognition/editstudent.html',args)
 
 def userprofile(request):
     if not request.session.has_key('t_id'):
@@ -356,4 +412,6 @@ def view_student(request):
 
     args = {'class': classes,'message': error}
     return  render(request, 'recognition/editstudent.html',args)
+
+
 
