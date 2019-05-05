@@ -313,23 +313,7 @@ def questionseries(request):
             'questionBank_testseries': questionBank_testseries, 'isEmpty': isEmpty}
     return render(request, 'recognition/questionseries.html', args)
 
-    if 'rollno' in request.POST and 'name' in request.POST:
-        s_rollno = request.POST['rollno']
-        s_name = request.POST['name']
-        s_class = request.POST['s_class']
-        s_school = request.POST['school']
-        if Student.objects.filter(s_rollno=s_rollno, s_class=s_class, s_school_name=s_school).exists():
-            error = 1
-            args = {'class': classes,'message': error}
-            return render(request, 'recognition/editstudent.html', args)
-        else:
-            Student.objects.create(s_rollno=s_rollno, s_name=s_name, s_class=s_class, s_school_name=s_school)
-            error = 2
-            args = {'class': classes,'message': error}
-            return render(request, 'recognition/editstudent.html', args)
 
-    args = {'class': classes,'message': error}
-    return  render(request, 'recognition/editstudent.html',args)
 
 def userprofile(request):
     if not request.session.has_key('t_id'):
@@ -412,6 +396,4 @@ def view_student(request):
 
     args = {'class': classes,'message': error}
     return  render(request, 'recognition/editstudent.html',args)
-
-
 
