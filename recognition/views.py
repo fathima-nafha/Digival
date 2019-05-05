@@ -1,114 +1,15 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
-from .forms import UploadQuestionBank, RegisterForm, QuestionBankForm
+from .forms import RegisterForm,  UploadQuestionBank
 from .models import QuestionBank,AddStudent, Student,Teacher,QuestionPaper, AddQuestionBank
 from .recognize import recognize, evaluate_paper
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth import login as auth_login
-
-from django.conf import settings
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.template import loader
-from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
-from django.core.mail import send_mail
-#from settings import DEFAULT_FROM_EMAIL
-from django.views.generic import *
-#from utils.forms.reset_password_form import PasswordResetRequestForm
-from django.contrib.auth.forms import PasswordResetForm
-from django.contrib import messages
-from django.contrib.auth.models import User
-from django.db.models.query_utils import Q
-
+from .import forms
 
 # Create your views here.
 
-class ResetPasswordRequestView(FormView):
-    template_name = "recognition/test_template.html"    #code for template is given below the view's code
-    success_url = '/recognition/login'
-    form_class = PasswordResetForm
-
-    @staticmethod
-    def validate_email_address(email):
-    #This method here validates the if the input is an email address or not. Its return type is boolean, True if the input is a email address or False if its not.
-
-        try:
-            validate_email(email)
-            return True
-        except ValidationError:
-            return False
-
-    def post(self, request, *args, **kwargs):
-    #A normal post request which takes input from field "email_or_username" (in ResetPasswordRequestForm).
-
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            data= form.cleaned_data["email_or_username"]
-        if self.validate_email_address(data) is True:                 #uses the method written above
-            '''
-            If the input is an valid email address, then the following code will lookup for users associated with that email address. If found then an email will be sent to the address, else an error message will be printed on the screen.
-            '''
-            associated_users= User.objects.filter(Q(email=data)|Q(username=data))
-            if associated_users.exists():
-                for user in associated_users:
-                        c = {
-                            'email': user.email,
-                            'domain': request.META['HTTP_HOST'],
-                            'site_name': 'Digival',
-                            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                            'user': user,
-                            'token': default_token_generator.make_token(user),
-                            'protocol': 'http',
-                            }
-                        subject_template_name='registration/password_reset_subject.txt'
-                        # copied from django/contrib/admin/templates/registration/password_reset_subject.txt to templates directory
-                        email_template_name='registration/password_reset_email.html'
-                        # copied from django/contrib/admin/templates/registration/password_reset_email.html to templates directory
-                        subject = loader.render_to_string(subject_template_name, c)
-                        # Email subject *must not* contain newlines
-                        subject = ''.join(subject.splitlines())
-                        email = loader.render_to_string(email_template_name, c)
-                        send_mail(subject, email, settings.DEFAULT_FROM_EMAIL , [user.email], fail_silently=False)
-                result = self.form_valid(form)
-                messages.success(request, 'An email has been sent to ' + data +". Please check its inbox to continue reseting password.")
-                return result
-            result = self.form_invalid(form)
-            messages.error(request, 'No user is associated with this email address')
-            return result
-        else:
-            '''
-            If the input is an username, then the following code will lookup for users associated with that user. If found then an email will be sent to the user's address, else an error message will be printed on the screen.
-            '''
-            associated_users= User.objects.filter(username=data)
-            if associated_users.exists():
-                for user in associated_users:
-                    c = {
-                        'email': user.email,
-                        'domain': '', #or your domain
-                        'site_name': '',
-                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                        'user': user,
-                        'token': default_token_generator.make_token(user),
-                        'protocol': 'http',
-                        }
-                    subject_template_name='registration/password_reset_subject.txt'
-                    email_template_name='registration/password_reset_email.html'
-                    subject = loader.render_to_string(subject_template_name, c)
-                    # Email subject *must not* contain newlines
-                    subject = ''.join(subject.splitlines())
-                    email = loader.render_to_string(email_template_name, c)
-                    send_mail(subject, email, settings.DEFAULT_FROM_EMAIL , [user.email], fail_silently=False)
-                result = self.form_valid(form)
-                messages.success(request, 'Email has been sent to ' + data +"'s email address. Please check its inbox to continue reseting password.")
-                return result
-            result = self.form_invalid(form)
-            messages.error(request, 'This username does not exist in the system.')
-            return result
-        messages.error(request, 'Invalid Input')
-        return self.form_invalid(form)
 
 
 def forgot(request):
@@ -126,6 +27,7 @@ def login(request):
             # Save session as cookie to login the user
             auth_login(request,user)
             user_email = User.objects.get(username = username)
+            #print(user_email)
             teacher_id = Teacher.objects.get(t_email = user_email.email)
             request.session['t_id'] = teacher_id.t_id
             # Success, now let's login the user.
@@ -221,13 +123,13 @@ def evaluate(request):
         results = recognize(url)
         if results != -1:
             db_answer = dict()
-            answers = QuestionBank.objects.filter(qb_class = qb_class, qb__qp_series = qp_series).distinct()
+            answers = QuestionBank.objects.filter( qb__qp_series = qp_series).distinct()
             for every in answers:
                 db_answer[every.qb_qno] = every.qb_answers
             test_score = evaluate_paper(results, db_answer)
             student.s_marks = test_score
             student.save()
-            args = {'1': qp_series, '2': qb_class, '3': qb_roll, 'url': url, 'results': results, 'score' : test_score, 'a':db_answer}
+            args = {'1': qp_series,  '2': qb_roll, 'url': url, 'results': results, 'score' : test_score, 'a':db_answer}
             print(args)
             messages = 3
 
@@ -241,27 +143,62 @@ def evaluate(request):
 
     return render(request, 'recognition/evaluate.html',
                   {'qp_series': qp_series_fromdb, 'class': classes, 'r_no': all_records, 'messages': messages })
+    return render(request, 'recognition/evaluate.html')
 
 
 def question(request):
     if request.method == 'POST':
-        form = UploadQuestionBank(request.POST, request.FILES)
-        if form.is_valid():
-            class1 = form.cleaned_data['class1']
-            qseries = form.cleaned_data['qseries']
-            number = form.cleaned_data['number']
-            question_paper = form.cleaned_data['question_paper']
-            args = {'class1':class1, 'qseries':qseries, 'number':number,'qp':question_paper}
+       form=UploadQuestionBank(request.POST,request.FILES)
+       if form.is_valid():
+           qp_subject = request.POST['qp_subject']
+           qp_test_series = request.POST['qp_test_series']
+           qp_class = request.POST['qp_class']
+           question_paper = request.FILES['question_paper']
+           if QuestionPaper.objects.filter(qp_subject=qp_subject, qp_class=qp_class, qp_test_series=qp_test_series).exists():
+               return render(request, 'recognition/question.html' , {
+                   'form': form,
+                   'error_message': 'Question Paper Already Exists!!'
+                })
+           else:
+                paper = QuestionPaper(qp_subject = qp_subject, qp_test_series= qp_test_series, qp_class=qp_class, question_paper= question_paper)
+                paper.save()
 
-            return render(request, "recognition/success.html", args)
+                qp_id=QuestionPaper.objects.filter(qp_subject = qp_subject, qp_test_series= qp_test_series, qp_class=qp_class).values('qp_id')
+                qp= qp_id[0]['qp_id']
+                request.session['q_id'] = qp
 
-        else:
-            form = UploadQuestionBank()
-            return render(request, "recognition/homepage.html", {'form': form})
+                if request.session.has_key('t_id'):
+                    t_id = request.session['t_id']
+
+                addques = AddQuestionBank()
+                addques.teacher_id=t_id
+                addques.qp_id=qp
+                addques.save()
+                #request.session.save()
+                return render(request, 'recognition/answerkeys.html')
     else:
-        form = UploadQuestionBank()
-        return render(request, "recognition/question.html", {'form':form})
-    #return render(request, 'recognition/question.html')
+        form=UploadQuestionBank()
+    return render(request,'recognition/question.html',{ 'form':form })
+
+def answerkeys(request):
+    if request.method == 'POST':
+        ques = request.POST.getlist('ques[]')
+        ans = request.POST.getlist('ans[]')
+        num = request.POST['num']
+        if request.session.has_key('q_id'):
+            q_id = request.session['q_id']
+
+        for i in range(len(ques)):
+            qb_qno = ques[i]
+            qb_answers = ans[i]
+            q_bank = QuestionBank(qb_qno=qb_qno, qb_answers=qb_answers)
+            q_bank.qb_id = q_id
+            q_bank.save()
+        #print(num)
+        return render(request,'recognition/homepage.html')
+    else:
+        return render(request, 'recognition/answerkeys.html')
+    #return render(request, 'recognition/answerkeys.html')
 
 def results(request):
     students = Student.objects.all()
@@ -287,5 +224,7 @@ def questionseries(request):
 
 def userprofile(request):
     return render(request, 'recognition/userprofile.html')
+
+
 
 

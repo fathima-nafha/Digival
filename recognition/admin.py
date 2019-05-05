@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Student, Teacher, QuestionBank, QuestionPaper, AddStudent,StudentMarks, AddQuestionBank
+from .models import Student, Teacher, QuestionBank, QuestionPaper, AddStudent,StudentMark, AddQuestionBank
 # Register your models here.
 admin.site.register(Teacher)
 
@@ -13,4 +13,4 @@ admin.site.register(AddStudent)
 
 admin.site.register(AddQuestionBank)
 
-admin.site.register(StudentMarks)
+admin.site.register(StudentMark)

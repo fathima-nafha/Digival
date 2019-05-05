@@ -34,14 +34,15 @@ class Student(models.Model):
 
 
 class QuestionPaper(models.Model):
-    qp_subject = models.CharField(max_length=15)
-    qp_test_series = models.CharField(max_length=15)
+    qp_id=models.AutoField(primary_key=True)
+    qp_subject = models.CharField(max_length=15, null=False, default='eng')
+    qp_test_series = models.CharField(max_length=15, null=False, default=1)
     question_paper = models.ImageField(upload_to=upload_location,
                                        null=True,
-                                       blank=True,
+                                       blank=False,
                                        width_field="width_field",
                                        height_field="height_field")
-    qp_class = models.IntegerField(null=False)
+    qp_class = models.IntegerField(null=False, default=1)
     height_field = models.IntegerField(default=0)
     width_field = models.IntegerField(default=0)
 
@@ -62,7 +63,7 @@ class QuestionBank(models.Model):
         unique_together = (('qb_qno', 'qb'),)
 
     def __str__(self):
-        return self.qb_qno+" "+ self.qb.qp_test_series
+        return self.qb.qp_subject +" "+self.qb.qp_test_series+' '+self.qb_qno+" "+ self.qb_answers
 
 
 
@@ -84,13 +85,13 @@ class AddStudent(models.Model):
 class AddQuestionBank(models.Model):
 
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    questionpaper = models.ForeignKey(QuestionPaper,on_delete=models.CASCADE)
+    qp = models.ForeignKey(QuestionPaper,on_delete=models.CASCADE)
 
     def __str__(self):
         return  self.teacher.t_name
 
 
-class StudentMarks(models.Model):
+class StudentMark(models.Model):
     question_paper = models.ForeignKey(QuestionPaper, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     marks = models.IntegerField(default=0, null=True)
