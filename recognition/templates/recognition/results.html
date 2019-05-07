@@ -1,4 +1,5 @@
-
+{% extends "recognition/base2.html" %}
+{% block content %}
 {% load static %}
 <html lang="en">
 <head>
@@ -10,14 +11,14 @@
 
 </head>
 
-<body style="background-image: url(/static/images/question3.jpg); background-repeat : no-repeat;">
+<body>
 
 
 
 	<div class="container">
 
 		<div id="one">
-            <p> RESULTS</p>
+            <b><h1 align="center"> RESULTS</h1></b>
 			<hr>
 			</div>
 		<div >
@@ -50,8 +51,8 @@
 
 		</div>
 
-	</div>
-	<div class="limiter">
+        <br><br>
+	    <div class="limiter">
 			<div class="container-table100" id="container-table100">
 
 
@@ -85,5 +86,11 @@
 			{% endif %}
 		</div>
 	</div>
+
+</div>
+  <br><br><br>
 </body>
+
 </html>
+
+{% endblock %}
