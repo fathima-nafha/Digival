@@ -110,9 +110,6 @@ def evaluate(request):
     questionBank_subject = QuestionPaper.objects.values('qp_subject').distinct()
     questionBank_testseries = QuestionPaper.objects.values('qp_test_series').distinct()
     messages = 0
-    if request.session.has_key('t_id'):
-        t_id = request.session['t_id']
-        teacher = Teacher.objects.get(t_id=t_id)
     all_records = Student.objects.all()
     classes = QuestionPaper.objects.order_by('qp_class').values('qp_class').distinct()
     if request.method == 'POST':
@@ -120,7 +117,7 @@ def evaluate(request):
         testseries = request.POST['testseries']
         qb_class = request.POST['class']
         qb_roll = request.POST['s_rollno']
-        student = Student.objects.get(s_rollno=qb_roll, s_class = qb_roll)
+        student = Student.objects.get(s_rollno=qb_roll, s_class = qb_class)
         if len(request.FILES) == 0:
             messages = 2
             return render(request, 'recognition/evaluate.html',
@@ -129,7 +126,12 @@ def evaluate(request):
                            'messages': messages})
 
         answer_paper = request.FILES['answer']
-        answer_model = AddStudent.objects.create(teacher=teacher, student=student, answer_paper=answer_paper)
+        answer_model = AddStudent.objects.update_or_create(teacher=teacher,
+                                                           student=student,
+                                                           answer_paper=answer_paper,
+                                                           defaults={'teacher': teacher,
+                                                                     'student': student,
+                                                                     'answer_paper': answer_paper})
         url = 'media/' + str(qb_roll) + '/' + answer_paper.name
         print(url)
         results = recognize(url)
@@ -141,7 +143,12 @@ def evaluate(request):
                 db_answer[every.qb_qno] = every.qb_answers
             test_score = evaluate_paper(results, db_answer)
             qp = QuestionPaper.objects.get(qp_subject=subject, qp_test_series=testseries, qp_class=qb_class)
-            studentMarks = StudentMarks.objects.create(question_paper=qp, student=student, marks=test_score)
+            StudentMarks.objects.update_or_create(question_paper=qp,
+                                                  student=student,
+                                                  marks=test_score,
+                                                  defaults = {'question_paper': qp,
+                                                              'student': student,
+                                                              'marks': test_score})
             args = {'1': testseries, '9': subject, '2': qb_class, '3': qb_roll, 'url': url, 'results': results,
                     'score': test_score, 'a': db_answer}
             print(args)
@@ -278,9 +285,7 @@ def questionseries(request):
         subject = request.POST['subject']
         testseries = request.POST['testseries']
         qb_class = request.POST['class']
-        request.session['subject'] =subject
-        request.session['testseries'] = testseries
-        request.session['qb_class'] = qb_class
+
         questionBank = QuestionBank.objects.filter(qb__qp_class=qb_class, qb__qp_subject=subject,
                                                    qb__qp_test_series=testseries)
         isEmpty = 0
@@ -322,7 +327,11 @@ def userprofile(request):
     t_id = request.session['t_id']
     t = Teacher.objects.get(t_id = t_id)
     args = {'teacher' : t}
-    print(str(args))
+    if request.method == 'POST':
+        t_name = request.POST['t_name']
+        t_school_name = request.POST['t_school_name']
+        Teacher.objects.filter(t_id = t_id).update(t_name = t_name, t_school_name = t_school_name)
+        return render(request, 'recognition/userprofile.html', args)
 
     return render(request, 'recognition/userprofile.html', args)
 

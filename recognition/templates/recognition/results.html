@@ -8,7 +8,12 @@
 
 	<link rel="stylesheet" type="text/css" href="{% static 'css/sign.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/results.css' %}">
+	<script>
+		function preventBack(){window.history.forward();}
+    setTimeout("preventBack()", 0);
+    window.onunload=function(){null};
 
+	</script>
 </head>
 
 <body>
