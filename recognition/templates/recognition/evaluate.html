@@ -5,7 +5,8 @@
 	<title>Digival</title>
 	<link rel="stylesheet" type="text/css" href="{% static 'css/sign.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
-
+    <link rel="stylesheet" type="text/css" href="{% static 'css/loader.css' %}">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 	<script type = "text/javascript">
 
         switch({{messages}})
@@ -15,20 +16,43 @@
             case 2: alert('Please Upload an Image!');
             break;
 			case 3: alert('Successfully Evaluated!');
-
+			break;
+			case 4: alert('Sorry! Test Series not available...Please Upload Question Bank!');
+			break;
+			case 5: alert('Sorry! Student not found.');
 			break;
         }
+
+
      function preventBack(){window.history.forward();}
     setTimeout("preventBack()", 0);
     window.onunload=function(){null};
 
+
+
 </script>
+	<script>
+
+$('#loader').addClass("hide-loader");
+$(".container").addClass("hide-container");
+$(document).ready(function(){
+
+$("#submitBtn").click(function(){
+$("#loader").show();
+$(".container").hide();
+});
+});
+
+if ( {{show }} ){
+$("#loader").hide();
+$(".container").show();
+}
+
+	</script>
 </head>
 <body>
 <header>
-	<!--function preventBack(){window.history.forward();}-->
-    <!--setTimeout("preventBack()", 0);-->
-    <!--window.onunload=function(){null};-->
+
 		<table width='100%'>
 			<tr>
 				<td style="color: white;"><p><h1 class='h'>DIGIVAL</h1>
@@ -45,9 +69,10 @@
 		</table>
 	</header>
 <br><br>
-
-	<div class="container">
+	<div class="loader" id="loader" style="display:none"><img src="{% static 'images/loader.gif'%}"></div>
+	<div class="container" id="container" >
 		<h1>Evaluation</h1><hr>
+
 		<form action='' method="post" enctype="multipart/form-data">
 			{% csrf_token %}
 			<label><b>Choose Subject</b></label>
@@ -80,12 +105,12 @@
 
 				{% endfor %}
 			</select>
-			<hr><center><input type="submit" value='Evaluate' name="" id="submitBtn"></center>
+			<hr><center><input class="freeze" type="submit" value='Evaluate' id="submitBtn"></center>
 
 
 
 		</form>
-		<center><a class="btn" href="{% url 'recognition:homepage' %}"><button id="backBtn">Back</button></a> </center>
+		<center><a class="btn " href="{% url 'recognition:homepage' %}"><button id="backBtn">Back</button></a> </center>
 
 	</div>
 

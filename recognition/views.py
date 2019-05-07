@@ -1,6 +1,7 @@
 import csv
 import pandas
 import re
+import time
 
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
@@ -101,7 +102,7 @@ def signup(request):
 
 
 def evaluate(request):
-
+    show = 1
     if not request.session.has_key('t_id'):
         return login(request)
 
@@ -110,21 +111,34 @@ def evaluate(request):
     questionBank_subject = QuestionPaper.objects.values('qp_subject').distinct()
     questionBank_testseries = QuestionPaper.objects.values('qp_test_series').distinct()
     messages = 0
-    all_records = Student.objects.all()
+    rollno = Student.objects.values('s_rollno').distinct()
     classes = QuestionPaper.objects.order_by('qp_class').values('qp_class').distinct()
     if request.method == 'POST':
         subject = request.POST['subject']
         testseries = request.POST['testseries']
         qb_class = request.POST['class']
         qb_roll = request.POST['s_rollno']
-        student = Student.objects.get(s_rollno=qb_roll, s_class = qb_class)
+
         if len(request.FILES) == 0:
             messages = 2
             return render(request, 'recognition/evaluate.html',
                           {'questionBank_subject': questionBank_subject,
-                           'questionBank_testseries': questionBank_testseries, 'class': classes, 'r_no': all_records,
-                           'messages': messages})
+                           'questionBank_testseries': questionBank_testseries, 'class': classes, 'r_no': rollno,
+                           'messages': messages, 'show': show})
+        elif not QuestionPaper.objects.filter(qp_subject = subject, qp_class = qb_class, qp_test_series = testseries).exists():
+            messages = 4
+            return render(request, 'recognition/evaluate.html',
+                          {'questionBank_subject': questionBank_subject,
+                           'questionBank_testseries': questionBank_testseries, 'class': classes, 'r_no': rollno,
+                           'messages': messages,'show': show})
+        elif not Student.objects.filter(s_rollno=qb_roll, s_class=qb_class).exists():
+            messages = 5
+            return render(request, 'recognition/evaluate.html',
+                          {'questionBank_subject': questionBank_subject,
+                           'questionBank_testseries': questionBank_testseries, 'class': classes, 'r_no': rollno,
+                           'messages': messages, 'show': show})
 
+        student = Student.objects.get(s_rollno=qb_roll, s_class=qb_class)
         answer_paper = request.FILES['answer']
         answer_model = AddStudent.objects.update_or_create(teacher=teacher,
                                                            student=student,
@@ -149,9 +163,7 @@ def evaluate(request):
                                                   defaults = {'question_paper': qp,
                                                               'student': student,
                                                               'marks': test_score})
-            args = {'1': testseries, '9': subject, '2': qb_class, '3': qb_roll, 'url': url, 'results': results,
-                    'score': test_score, 'a': db_answer}
-            print(args)
+
             messages = 3
 
         else:
@@ -160,12 +172,12 @@ def evaluate(request):
             messages = 1
             return render(request, 'recognition/evaluate.html',
                           {'questionBank_subject': questionBank_subject,
-                           'questionBank_testseries': questionBank_testseries, 'class': classes, 'r_no': all_records,
-                           'messages': messages})
+                           'questionBank_testseries': questionBank_testseries, 'class': classes, 'r_no': rollno,
+                           'messages': messages, 'show': show})
 
     return render(request, 'recognition/evaluate.html',
                   {'questionBank_subject': questionBank_subject, 'questionBank_testseries': questionBank_testseries,
-                   'class': classes, 'r_no': all_records, 'messages': messages})
+                   'class': classes, 'r_no': rollno, 'messages': messages, 'show': show})
 
 
 def question(request):
@@ -405,4 +417,13 @@ def view_student(request):
 
     args = {'class': classes,'message': error}
     return  render(request, 'recognition/editstudent.html',args)
+
+
+
+def test(request):
+    if request.method == 'POST':
+        time.sleep(10)
+        return render(request, 'recognition/sample.html',{'show': 1})
+
+    return render(request, 'recognition/sample.html',{'show': 0})
 

@@ -28,7 +28,6 @@ class Student(models.Model):
     s_class = models.IntegerField(null=True)
     s_school_name = models.CharField(max_length=128, null=True)
 
-
     def __str__(self):
         return self.s_name
 
