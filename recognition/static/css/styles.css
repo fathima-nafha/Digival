@@ -10,6 +10,13 @@ height: 100%;
 font-family: 'Numans', sans-serif;
 }
 
+@media (max-width: 600px) {
+  nav, article {
+    width: 100%;
+    height: auto;
+  }
+}
+
 .container{
 height: 100%;
 align-content: center;
