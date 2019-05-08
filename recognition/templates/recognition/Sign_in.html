@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="container" xmlns="http://www.w3.org/1999/html">
+<div class="container" xmlns="http://www.w3.org/1999/html" >
         <form action="{% url 'recognition:login' %}" method="post">
             {% csrf_token %}
             <div class="col-md-8 col-md-offset-2">
@@ -30,7 +30,7 @@
 
                         <div class="col-md-6 col-md-offset-4">
                             <center>
-                            <input name="login" type="submit" value="Login" class="btn btn-success"> &nbsp;
+                            <input name="login" type="submit" value="Login" class="btn btn-success" style="background-color:#5680e9"> &nbsp;
                            <hr>
                             <p>Don't have an account? <a href="/signup/">Sign Up</a>.</p>
                             <a href="/forgotpassword/">Forgot your password?</a>
