@@ -10,7 +10,7 @@ from django.shortcuts import render
 
 from .forms import UploadQuestionBank, RegisterForm
 from .models import AddQuestionBank
-from .models import QuestionBank, AddStudent, StudentMarks, Student, Teacher, QuestionPaper
+from .models import QuestionBank, StudentMarks, Student, Teacher, QuestionPaper
 from .recognize import recognize, evaluate_paper
 
 
@@ -421,13 +421,4 @@ def view_student(request):
 
     args = {'class': classes,'message': error}
     return  render(request, 'recognition/editstudent.html',args)
-
-
-
-def test(request):
-    if request.method == 'POST':
-        time.sleep(10)
-        return render(request, 'recognition/sample.html',{'show': 1})
-
-    return render(request, 'recognition/sample.html',{'show': 0})
 

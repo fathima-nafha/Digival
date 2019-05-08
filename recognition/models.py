@@ -65,14 +65,6 @@ class QuestionBank(models.Model):
         return self.qb.qp_subject +" "+self.qb.qp_test_series+' '+self.qb_qno+" "+ self.qb_answers
 
 
-
-class AddStudent(models.Model):
-
-
-    def __str__(self):
-        return  str(self.teacher.t_id) +" " + self.student.s_name + " " + str(self.student.s_rollno)
-
-
 class AddQuestionBank(models.Model):
 
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
