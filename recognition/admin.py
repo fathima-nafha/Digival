@@ -7,7 +7,7 @@ admin.site.register(Student)
 
 admin.site.register(QuestionBank)
 
-admin.site.register(QuestionPaper
+admin.site.register(QuestionPaper)
 
 admin.site.register(AddQuestionBank)
 
