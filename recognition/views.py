@@ -103,6 +103,7 @@ def signup(request):
 
 def evaluate(request):
     show = 1
+    messages = 0
     if not request.session.has_key('t_id'):
         return login(request)
 
@@ -110,7 +111,7 @@ def evaluate(request):
     teacher = Teacher.objects.get(t_id=t_id)
     questionBank_subject = QuestionPaper.objects.values('qp_subject').distinct()
     questionBank_testseries = QuestionPaper.objects.values('qp_test_series').distinct()
-    messages = 0
+
     rollno = Student.objects.values('s_rollno').distinct()
     classes = QuestionPaper.objects.order_by('qp_class').values('qp_class').distinct()
     if request.method == 'POST':
@@ -140,15 +141,16 @@ def evaluate(request):
 
         student = Student.objects.get(s_rollno=qb_roll, s_class=qb_class)
         answer_paper = request.FILES['answer']
-        answer_model = AddStudent.objects.update_or_create(teacher=teacher,
-                                                           student=student,
-                                                           answer_paper=answer_paper,
-                                                           defaults={'teacher': teacher,
-                                                                     'student': student,
-                                                                     'answer_paper': answer_paper})
-        url = 'media/' + str(qb_roll) + '/' + answer_paper.name
-        print(url)
+        qp = QuestionPaper.objects.get(qp_subject=subject, qp_test_series=testseries, qp_class=qb_class)
+        answer_model = StudentMarks.objects.create(question_paper=qp,
+                                                teacher=teacher,
+                                                student=student,
+                                                answer_paper=answer_paper)
+
+        url = 'media/' + str(qb_class)+"/"+str(qb_roll) + '/' + answer_paper.name
         results = recognize(url)
+
+
         if results != -1:
             db_answer = dict()
             answers = QuestionBank.objects.filter(qb__qp_class=qb_class, qb__qp_subject=subject,
@@ -156,20 +158,14 @@ def evaluate(request):
             for every in answers:
                 db_answer[every.qb_qno] = every.qb_answers
             test_score = evaluate_paper(results, db_answer)
-            qp = QuestionPaper.objects.get(qp_subject=subject, qp_test_series=testseries, qp_class=qb_class)
-            StudentMarks.objects.update_or_create(question_paper=qp,
-                                                  student=student,
-                                                  marks=test_score,
-                                                  defaults = {'question_paper': qp,
-                                                              'student': student,
-                                                              'marks': test_score})
-
+            answer_model = StudentMarks.objects.filter(question_paper=qp, teacher = teacher, student=student, answer_paper = answer_paper).update(marks=test_score)
             messages = 3
 
         else:
+
+            messages = 1
             answer_model.answer_paper.delete()
             answer_model.delete()
-            messages = 1
             return render(request, 'recognition/evaluate.html',
                           {'questionBank_subject': questionBank_subject,
                            'questionBank_testseries': questionBank_testseries, 'class': classes, 'r_no': rollno,
@@ -231,7 +227,7 @@ def answerkeys(request):
             q_bank = QuestionBank(qb_qno=qb_qno, qb_answers=qb_answers)
             q_bank.qb_id = q_id
             q_bank.save()
-        #print(num)
+
         return render(request,'recognition/homepage.html')
     else:
         return render(request, 'recognition/answerkeys.html')
@@ -242,6 +238,8 @@ def results(request):
     if not request.session.has_key('t_id'):
         return login(request)
     isEmpty = 1
+    t_id = request.session['t_id']
+    teacher = Teacher.objects.get(t_id = t_id)
     questionBank_subject = QuestionPaper.objects.values('qp_subject').distinct()
     questionBank_testseries = QuestionPaper.objects.values('qp_test_series').distinct()
     classes = QuestionPaper.objects.order_by('qp_class').values('qp_class').distinct()
@@ -249,11 +247,11 @@ def results(request):
         subject = request.POST['subject']
         testseries = request.POST['testseries']
         qb_class = request.POST['class']
-        studentmarks = StudentMarks.objects.filter(question_paper__qp_subject=subject,
-                                                   question_paper__qp_test_series=testseries,
-                                                   question_paper__qp_class=qb_class).count()
 
-        if studentmarks == 0:
+
+        if not StudentMarks.objects.filter(question_paper__qp_subject=subject,
+                                                   question_paper__qp_test_series=testseries,
+                                                   question_paper__qp_class=qb_class, teacher = teacher).exists():
             args = {'questionBank_subject': questionBank_subject,
                     'questionBank_testseries': questionBank_testseries,
                     'class': classes, 'isEmpty': isEmpty}
@@ -261,7 +259,7 @@ def results(request):
         isEmpty = 0
         studentmarks = StudentMarks.objects.filter(question_paper__qp_subject=subject,
                                                    question_paper__qp_test_series=testseries,
-                                                   question_paper__qp_class=qb_class)
+                                                   question_paper__qp_class=qb_class, teacher=teacher)
 
         args = {'questionBank_subject': questionBank_subject,
                 'questionBank_testseries': questionBank_testseries,
@@ -298,16 +296,22 @@ def questionseries(request):
         testseries = request.POST['testseries']
         qb_class = request.POST['class']
 
-        questionBank = QuestionBank.objects.filter(qb__qp_class=qb_class, qb__qp_subject=subject,
+        if not QuestionPaper.objects.filter(qp_class = qb_class, qp_subject = subject, qp_test_series = testseries).exists():
+            isEmpty = 1
+        else:
+            questionBank = QuestionBank.objects.filter(qb__qp_class=qb_class, qb__qp_subject=subject,
                                                    qb__qp_test_series=testseries)
-        isEmpty = 0
-        args = {'class': classes,
+            questionPaper = QuestionPaper.objects.filter(qp_class = qb_class, qp_subject = subject, qp_test_series = testseries).values('question_paper')
+
+            isEmpty=0
+            args = {'class': classes,
                 'questionBank_subject': questionBank_subject,
                 'questionBank_testseries': questionBank_testseries,
                 'isEmpty': isEmpty,
-                'questionBank': questionBank}
+                'questionBank': questionBank,
+                'questionPaper': questionPaper}
 
-        return render(request, 'recognition/questionseries.html', args)
+            return render(request, 'recognition/questionseries.html', args)
     if request.method == 'POST' and 'qbAnswer' in request.POST:
 
         qbAnswer = request.POST['qbAnswer']
@@ -359,7 +363,7 @@ def view_student(request):
         if 'class' in request.POST:
             class1 = request.POST['class']
             students = Student.objects.filter(s_class = class1).order_by('s_rollno')
-            print(type(students))
+
             args = {'class': classes, 'students': students, 'message': error}
             return render(request, 'recognition/editstudent.html', args)
 

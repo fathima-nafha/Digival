@@ -121,7 +121,8 @@
                {% csrf_token %}
          <div class="modal-body mx-3">
             <div class="md-form mb-5">
-               <label data-error="wrong" data-success="right" for="fileUpload">Upload File</label>
+               <label data-error="wrong" data-success="right" for="fileUpload">Upload File</label><img src="{% static 'images/questionmark.png' %}" id="qmark">
+                <div id="showOnHover" >The file should be of .XLS or .XLSX format. It should contain 4 rows specifying student Roll No, Name, Class and School</div>
                <input type="file" name="fileUpload" id="fileUpload" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" class="form-control validate" >
             </div>
 
