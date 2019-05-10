@@ -55,23 +55,15 @@
 <!-- Material Design Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/css/mdb.min.css" rel="stylesheet">
 </head>
-<body  style="background-image:url(/static/images/blue3.jpg);" class="override">
+<body  style="background-image:url(/static/images/blue3.jpg);" class="override" >
 <header>
 		<table width='100%'>
 			<tr>
-				<td style="color: white;"><p><h1 class='h'>DIGIVAL</h1>
+				<td style="color: white;"><p><h1 class='h animated slideInLeft'>DIGIVAL</h1>
 					<h3 class='h'>An Automated Evaluation System</h3></p></td>
-					<td width="150px">
-						<a href="{% url 'recognition:login' %}" id="logout">
-						<table cellspacing="10pt">
-						<tr>
-							<td><img src="{% static 'images/user.png' %}" id='user'></td>
-							<td><h2 style="color: white;" align="center">Logout</h2></td>
-						</tr></table></a>
-					</td>
 			</tr>
 		</table>
-	</header>
+	</header><br><br><br>
 <br><br>
 	<div class="container">
 		<form method="post">
@@ -90,6 +82,7 @@
 		</div>
 		<hr><center><input type="submit" value='Submit' name="" id="submitBtn" style="background-color:#5680e9;color:white;"></center>
 	</form>
+        <center><a  href="{% url 'recognition:homepage' %}"><button id="backBtn" style="background-color:#5680e9;color:white;">Go To HomePage</button></a> </center>
 	</div><br><br><br><br>
 <footer>
 		<hr>

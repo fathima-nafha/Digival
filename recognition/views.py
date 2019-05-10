@@ -21,7 +21,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .forms import UploadQuestionBank, RegisterForm , SetPasswordForm, PasswordResetRequestForm
 from .models import AddQuestionBank
@@ -316,7 +316,10 @@ def question(request):
         form=UploadQuestionBank()
     return render(request,'recognition/question.html',{ 'form':form })
 
+
 def answerkeys(request):
+    if not request.session.has_key('t_id'):
+        return login(request)
     if request.method == 'POST':
         ques = request.POST.getlist('ques[]')
         ans = request.POST.getlist('ans[]')
@@ -334,7 +337,7 @@ def answerkeys(request):
         return render(request,'recognition/homepage.html')
     else:
         return render(request, 'recognition/answerkeys.html')
-    #return render(request, 'recognition/answerkeys.html')
+    return render(request, 'recognition/answerkeys.html')
 
 
 def results(request):
@@ -384,6 +387,7 @@ def homepage(request):
 
     t_id = request.session['t_id']
     return render(request, 'recognition/homepage.html', {"t_id": t_id})
+
 
 def questionseries(request):
     message = 0
@@ -442,7 +446,6 @@ def questionseries(request):
     args = {'class': classes, 'questionBank_subject': questionBank_subject,
             'questionBank_testseries': questionBank_testseries, 'isEmpty': isEmpty,'message': message}
     return render(request, 'recognition/questionseries.html', args)
-
 
 
 def userprofile(request):
@@ -535,6 +538,9 @@ def view_student(request):
     return  render(request, 'recognition/editstudent.html',args)
 
 
-
 def logout(request):
-    pass
+    try:
+        del request.session['t_id']
+    except KeyError:
+        pass
+    return redirect('recognition:login')

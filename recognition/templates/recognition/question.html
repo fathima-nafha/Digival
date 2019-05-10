@@ -16,19 +16,11 @@
 <header>
 		<table width='100%'>
 			<tr>
-				<td style="color: white;"><p><h1 class='h'>DIGIVAL</h1>
+				<td style="color: white;"><p><h1 class='h animated slideInLeft'>DIGIVAL</h1>
 					<h3 class='h'>An Automated Evaluation System</h3></p></td>
-					<td width="150px">
-						<a href="{% url 'recognition:login' %}" id="logout">
-						<table cellspacing="10pt">
-						<tr>
-							<td><img src="{% static 'images/user.png' %}" id='user'></td>
-							<td><h2 style="color: white;" align="center">Logout</h2></td>
-						</tr></table></a>
-					</td>
 			</tr>
 		</table>
-	</header>
+	</header><br><br><br>
 <br><br>
 	<div class="container">
 		<h1 align="center">Upload Question Paper</h1><hr>
@@ -61,6 +53,7 @@
 
 		    <input type="submit" value='Next' name = 'Next' id="submitBtn" style="background-color:#5680e9;color:white;"/>
         </form>
+        <center><a  href="{% url 'recognition:homepage' %}"><button id="backBtn" style="background-color:#5680e9;color:white;">Back</button></a> </center>
     </div><br><br><br><br>
 <footer>
 		<hr>
