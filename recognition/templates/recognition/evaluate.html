@@ -49,8 +49,15 @@ $(".container").show();
 }
 
 	</script>
+
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+<!-- Bootstrap core CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+<!-- Material Design Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/css/mdb.min.css" rel="stylesheet">
 </head>
-<body>
+<body  style="background-image:url(/static/images/blue5.jpg);" class="override">
 <header>
 
 		<table width='100%'>
@@ -71,7 +78,7 @@ $(".container").show();
 <br><br>
 	<div class="loader" id="loader" style="display:none"><img src="{% static 'images/loader.gif'%}"></div>
 	<div class="container" id="container" >
-		<h1>Evaluation</h1><hr>
+		<h1 align="center">Evaluation</h1><hr>
 
 		<form action='' method="post" enctype="multipart/form-data">
 			{% csrf_token %}
@@ -105,15 +112,15 @@ $(".container").show();
 
 				{% endfor %}
 			</select>
-			<hr><center><input class="freeze" type="submit" value='Evaluate' id="submitBtn"></center>
+			<hr><center><input class="freeze" type="submit" value='Evaluate' id="submitBtn" style="background-color:#5680e9;color:white;"></center>
 
 
 
 		</form>
-		<center><a class="btn " href="{% url 'recognition:homepage' %}"><button id="backBtn">Back</button></a> </center>
+		<center><a  href="{% url 'recognition:homepage' %}"><button id="backBtn" style="background-color:#5680e9;color:white;">Back</button></a> </center>
 
 	</div>
-
+<br><br><br><br>
 <footer>
 		<hr>
 		<p>
@@ -134,5 +141,13 @@ $(".container").show();
 			</p>
 		</p>
 	</footer>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/js/mdb.min.js"></script>
 </body>
 </html>

@@ -40,7 +40,7 @@
   margin: auto;
   text-align: center;
   font-family: arial;
-  background-color: black;
+  background-color:  black;
 }
 
 .title {
@@ -52,14 +52,14 @@ button {
 
   display: inline-block;
 
-  background-color: #4CAF50;
+  background-color:#5680e9;
   color: white;
   padding: 16px 20px;
-  margin: 8px 0;
+  margin: 20px 0px 5px;
   border: none;
   cursor: pointer;
   opacity: 0.9
-}
+  }
 
 a {
   text-decoration: none;
@@ -72,7 +72,7 @@ button:hover, a:hover {
 }
 </style>
 </head>
-<body>
+<body style="background-image:url(/static/images/blue2.jpg);" class="override">
 <header>
 		<table width='100%'>
 			<tr>
@@ -82,7 +82,7 @@ button:hover, a:hover {
 		</table>
 	</header>
 
-<h1 style="text-align:center;color:black;">User Profile</h1>
+<br><br><br><br>
 
 <div class="card"  style="color:white;">
   <!--img src="/w3images/team2.jpg" alt="John" style="width:100%"--><br>
@@ -108,12 +108,14 @@ button:hover, a:hover {
 
 <div style="text-align: center;">
 <a href="{% url 'recognition:view_student' %}">
-<button style="background-color:#4caf50;width: 20%;font-family:bold;">EDIT  STUDENT DETAILS</button></a>  &nbsp; &nbsp; &nbsp; &nbsp;
-<a href="{% url 'recognition:qs' %}"><button style="background-color:#4caf50;width: 20%;" >QUESTION SERIES </button></a>
+<button style="background-color:#5680e9;color:white;width:20%;">EDIT  STUDENT DETAILS</button></a>  &nbsp; &nbsp; &nbsp; &nbsp;
+<a href="{% url 'recognition:qs' %}"><button style="background-color:#5680e9;color:white; width:20%;" >QUESTION SERIES </button></a>
 
- &nbsp;
-<a href="{% url 'recognition:login' %}"> <button style="background-color:#4caf50;width: 20%;">LOGOUT</button></a>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="{% url 'recognition:login' %}"> <button style="background-color:#5680e9;color:white;width:20%;">LOGOUT</button></a>
 </div>
+<br>
+<br><br><br>
 <footer>
 		<hr>
 		<p>
@@ -161,7 +163,7 @@ button:hover, a:hover {
             </div>
 
          <div class="modal-footer d-flex justify-content-center">
-            <button class="btn btn-default btn-success" onclick="location.reload();" >Save</button>
+            <button class="btn btn-default btn-success" style="background-color:#5680e9;color:white;" onclick="location.reload();" >Save</button>
          </div>
 		 </div>
          </form>
