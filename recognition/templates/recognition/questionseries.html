@@ -1,6 +1,4 @@
-
 {% load static %}
-
 <html>
    <head>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -10,6 +8,7 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.5/js/bootstrap-select.min.js"></script>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       <meta name="viewport" content="width=device-width, initial-scale=1">
+       <title>Question Paper</title>
 <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
       <style>
@@ -19,6 +18,8 @@
          }
          if({{message}})
          alert('Sucessfuly Updated!');
+
+
       </style>
 <script>
 
@@ -39,13 +40,19 @@
      $(".modal-body #q_id").val( q_id );
      $('#modalLoginForm').modal('show');
    });
+
+
+   function preventBack(){window.history.forward();}
+    setTimeout("preventBack()", 0);
+    window.onunload=function(){null};
+
 </script>
       <link rel="stylesheet" href="{% static 'css/questionseries.css' %}">
       <style>
       </style>
       <title></title>
    </head>
-   <body style="background-image:url(/static/images/question3.jpg);">
+   <body style="background-image:url(/static/images/blue3.jpg);">
       {% block content %}
       <h1>Edit Question Paper</h1>
       <div class="container">
@@ -73,7 +80,7 @@
                <br><br>
                <input type="submit" ><br><br>
             </form>
-            <center><button type="submit" name="Back" id="backBtn" href="{% url 'recognition:homepage' %}">Back </button></center>
+            <center><a class="btn" href="{% url 'recognition:userprofile' %}"><button id="backBtn">Back</button></a> </center>
 
          </div>
          <div class="limiter">
@@ -81,6 +88,10 @@
 			{%if isEmpty == 1 %}
 			<h1>No results to display</h1>
 			{% else %}
+            {% for everyQp in questionPaper %}
+            <a id="qp-view" class="btn" href="/media/{{everyQp.question_paper}}" target="_blank">View QP</a>
+            {% endfor %}
+
             <div class="container-table100">
                <div class="wrap-table100">
                   <div class="table100">
@@ -123,6 +134,7 @@
 
 
                               </td>
+
                               <!--<td class="column3"><input type="submit" value="Edit" name="Edit" onclick=""></td>-->
                            </tr>
                            {% endfor %}

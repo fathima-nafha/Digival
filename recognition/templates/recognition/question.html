@@ -5,8 +5,14 @@
 	<title>Digival</title>
 	<link rel="stylesheet" type="text/css" href="{% static 'css/sign.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
+		<!-- Font Awesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+<!-- Bootstrap core CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+<!-- Material Design Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/css/mdb.min.css" rel="stylesheet">
 </head>
-<body>
+<body style="background-image:url(/static/images/blue3.jpg);">
 <header>
 		<table width='100%'>
 			<tr>
@@ -25,7 +31,7 @@
 	</header>
 <br><br>
 	<div class="container">
-		<h1>Upload Question Paper</h1><hr>
+		<h1 align="center">Upload Question Paper</h1><hr>
        <form action="{% url 'recognition:question' %}" enctype="multipart/form-data" method="post" >
 		   {% csrf_token %}
 		   {% if error_message %}
@@ -33,9 +39,9 @@
 		   {% endif %}
 			<label><b>Enter Subject</b></label>
 			<select name="qp_subject">
-				<option value="eng">English</option>
-				<option value="gk">GK</option>
-				<option value="evs">EVS</option>
+				<option value="English">English</option>
+				<option value="GK">GK</option>
+				<option value="EVS">EVS</option>
 			</select>
 
 			<label><b>Enter Test Series</b></label>
@@ -53,9 +59,9 @@
 			<p><input id = "answer" type="file" name="question_paper" accept="image/*" required></p>
             <hr>
 
-		    <input type="submit" value='Next' name = 'Next' id="submitBtn"/>
+		    <input type="submit" value='Next' name = 'Next' id="submitBtn" style="background-color:#5680e9;color:white;"/>
         </form>
-    </div>
+    </div><br><br><br><br>
 <footer>
 		<hr>
 		<p>
@@ -76,5 +82,13 @@
 			</p>
 		</p>
 	</footer>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/js/mdb.min.js"></script>
 </body>
 </html>

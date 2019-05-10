@@ -4,12 +4,18 @@
 	<title>Digival - Homepage</title>
 	<link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
+	<!-- Font Awesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+<!-- Bootstrap core CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+<!-- Material Design Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/css/mdb.min.css" rel="stylesheet">
 </head>
-<body>
+<body style="background-image:url(/static/images/blue2.jpg);" class="override">
 	<header>
 		<table width='100%'>
 			<tr>
-				<td style="color: white;"><p><h1 class='h'>DIGIVAL</h1>
+				<td style="color: white;"><p><h1 class='h animated slideInLeft'>DIGIVAL</h1>
 					<h3 class='h'>An Automated Evaluation System</h3></p></td>
 					<td width="150px">
 						<a href="{% url 'recognition:login' %}" id="logout">
@@ -21,37 +27,37 @@
 					</td>
 			</tr>
 		</table>
-	</header>
-	<table align="center" cellspacing="10px">
+	</header><br><br><br>
+	<table align="center" cellspacing="140px">
 		<tr>
 			<td>
 				<a href="{% url 'recognition:question' %}"><figure>
-					<img src="{% static 'images/paper.jpg' %}" class="content">
-					<figcaption>Upload Question Bank</figcaption>
+					<img src="{% static 'images/scan.jpg' %}" class="content">
+					<figcaption style="background-color:#5680e9;color:white;">Upload Question Bank</figcaption>
 				</figure></a>
 			</td>
 			<td>
 				<a href="{% url 'recognition:evaluate' %}"><figure>
-					<img src="{% static 'images/Evaluation-image.jpg' %}" class="content">
-					<figcaption>Evaluation</figcaption>
+					<img src="{% static 'images/correct.jpeg' %}" class="content">
+					<figcaption style="background-color:#5680e9;color:white;">Evaluation</figcaption>
 				</figure></a>
 			</td>
 		</tr>
 		<tr>
 			<td>
 				<a href="{% url 'recognition:results' %}"><figure>
-					<img src="{% static 'images/test.jpg' %}" class="content">
-					<figcaption>Check Results</figcaption>
+					<img src="{% static 'images/graduation.jpg' %}" class="content">
+					<figcaption style="background-color:#5680e9;color:white;">Check Results</figcaption>
 				</figure></a>
 			</td>
 			<td>
 				<a href="{% url 'recognition:userprofile' %}"><figure>
-					<img src="{% static 'images/Pr.png' %}" class="content">
-					<figcaption>User Profile</figcaption>
+					<img src="{% static 'images/Pr.jpeg' %}" class="content">
+					<figcaption style="background-color:#5680e9;color:white;">User Profile</figcaption>
 				</figure></a>
 			</td>
 		</tr>
-	</table>
+	</table><br><br><br><br>
 	<footer>
 		<hr>
 		<p>
@@ -72,5 +78,13 @@
 			</p>
 		</p>
 	</footer>
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/js/mdb.min.js"></script>
 </body>
 </html>

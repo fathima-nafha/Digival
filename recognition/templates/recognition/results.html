@@ -1,4 +1,7 @@
+{% extends "recognition/base2.html" %}
 
+
+{% block content %}
 {% load static %}
 <html lang="en">
 <head>
@@ -7,17 +10,22 @@
 
 	<link rel="stylesheet" type="text/css" href="{% static 'css/sign.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/results.css' %}">
+	<script>
+		function preventBack(){window.history.forward();}
+    setTimeout("preventBack()", 0);
+    window.onunload=function(){null};
 
+	</script>
 </head>
 
-<body style="background-image: url(/static/images/question3.jpg); background-repeat : no-repeat;">
+<body>
 
 
 
 	<div class="container">
 
 		<div id="one">
-            <p> RESULTS</p>
+            <b><h1 align="center"> RESULTS</h1></b>
 			<hr>
 			</div>
 		<div >
@@ -49,9 +57,9 @@
 		<center><button id="backBtn"><a class="btn" href="{% url 'recognition:homepage' %}">Back</a></button> </center>
 
 		</div>
-
 	</div>
-	<div class="limiter">
+        <br><br>
+	    <div class="limiter">
 			<div class="container-table100" id="container-table100">
 
 
@@ -65,7 +73,8 @@
 							<tr class="table100-head">
 								<th class="column1">Roll Number</th>
 								<th class="column2">Name</th>
-								<th class="column5">Marks</th>
+								<th class="column4">Marks</th>
+								<th class="column5">View Question Paper</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -73,8 +82,8 @@
 								<tr>
 									<td class="column1">{{ everyRecord.student.s_rollno }}</td>
 									<td class="column2">{{ everyRecord.student }}</td>
-									<td class="column5">{{ everyRecord.marks }}</td>
-
+									<td class="column4">{{ everyRecord.marks }}</td>
+									<td class="column5"><a href="{{ everyRecord.answer_paper.url }}" target="_blank">View</a></td>
 								</tr>
                                 {% endfor %}
 
@@ -85,5 +94,10 @@
 			{% endif %}
 		</div>
 	</div>
+
+  <br><br><br>
 </body>
+
 </html>
+
+{% endblock %}

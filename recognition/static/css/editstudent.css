@@ -51,7 +51,34 @@ label{
    padding: 10px 10px 5px 0px;
    margin: 5px 5px 5px 0px;
 }
+#qmark{
+    height: 18px;
+    width: 18px;
+    position: relative;
+}
+#showOnHover{
+    display: none;
 
+}
+#qmark:hover + #showOnHover{
+    display: block;
+    border : solid black 2px;
+    border-shadow:0 0 15px #A9A9A9;
+   color: white;
+    left: 150;
+    top: 50;
+
+  width: 220px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
 input[type=submit]{
   background-color:black;
   color: white;

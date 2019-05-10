@@ -1,7 +1,7 @@
 header {
-    background-color: #7AD07E;
+    background-color:#2a1b3d;
     font-family: Georgia;
-    color: #96f691;
+    color: #e4eddb;
     text-shadow: 3px 5px 5px #1e3e03e6;;
 }
 .h
@@ -15,7 +15,7 @@ header {
 }
 footer{
 width: 100%;
-background-color: #C9F3B6;
+background-color: #aaabb8;
 position: relative;
 margin-top: auto;
 }
@@ -30,3 +30,4 @@ margin-top: auto;
 #logout {
     cursor: pointer;
 }
+

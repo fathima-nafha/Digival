@@ -48,8 +48,14 @@
         	});
         });
 	</script>
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+<!-- Bootstrap core CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+<!-- Material Design Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/css/mdb.min.css" rel="stylesheet">
 </head>
-<body>
+<body  style="background-image:url(/static/images/blue3.jpg);" class="override">
 <header>
 		<table width='100%'>
 			<tr>
@@ -70,21 +76,21 @@
 	<div class="container">
 		<form method="post">
 			{% csrf_token %}
-		<h1>Enter Answer Keys</h1><hr>
+		<h1 align="center">Enter Answer Keys</h1><hr>
 			<label><b>Enter Number of Questions</b></label>
 			<input type="text" name="number" id="number" required="">
 
 			<hr>
 			<label><b>Enter Answer Keys</b></label> &nbsp;&nbsp;
-			<input type="button" value='Add Answer' class="addRow">
+			<input type="button" value='Add Answer' class="addRow" style="background-color:#5680e9;color:white;">
 		<div>
 			<table id='questions' cellspacing="20">
 
 			</table>
 		</div>
-		<hr><center><input type="submit" value='Submit' name="" id="submitBtn"></center>
+		<hr><center><input type="submit" value='Submit' name="" id="submitBtn" style="background-color:#5680e9;color:white;"></center>
 	</form>
-	</div>
+	</div><br><br><br><br>
 <footer>
 		<hr>
 		<p>
@@ -105,5 +111,6 @@
 			</p>
 		</p>
 	</footer>
+
 </body>
 </html>
