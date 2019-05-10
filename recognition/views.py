@@ -338,6 +338,7 @@ def answerkeys(request):
 
 
 def results(request):
+
     if not request.session.has_key('t_id'):
         return login(request)
     isEmpty = 1
@@ -385,7 +386,7 @@ def homepage(request):
     return render(request, 'recognition/homepage.html', {"t_id": t_id})
 
 def questionseries(request):
-
+    message = 0
     if not request.session.has_key('t_id'):
         return login(request)
 
@@ -398,7 +399,9 @@ def questionseries(request):
         subject = request.POST['subject']
         testseries = request.POST['testseries']
         qb_class = request.POST['class']
-
+        request.session['subject'] = subject
+        request.session['testseries'] = testseries
+        request.session['qb_class'] = qb_class
         if not QuestionPaper.objects.filter(qp_class = qb_class, qp_subject = subject, qp_test_series = testseries).exists():
             isEmpty = 1
         else:
@@ -412,29 +415,32 @@ def questionseries(request):
                 'questionBank_testseries': questionBank_testseries,
                 'isEmpty': isEmpty,
                 'questionBank': questionBank,
-                'questionPaper': questionPaper}
+                'questionPaper': questionPaper,'message': message}
 
             return render(request, 'recognition/questionseries.html', args)
     if request.method == 'POST' and 'qbAnswer' in request.POST:
 
         qbAnswer = request.POST['qbAnswer']
         q_id = request.POST['q_id']
+        message = 1
         QuestionBank.objects.filter(q_id=q_id).update(qb_answers=qbAnswer)
         if request.session.has_key('subject') and request.session.has_key('qb_class') and request.session.has_key('testseries') :
             subject = request.session['subject']
             qb_class = request.session['qb_class']
             testseries = request.session ['testseries']
+
             questionBank = QuestionBank.objects.filter(qb__qp_class=qb_class, qb__qp_subject=subject,
                                                        qb__qp_test_series=testseries)
             args = {'class': classes,
                     'questionBank_subject': questionBank_subject,
                     'questionBank_testseries': questionBank_testseries,
-                    'questionBank': questionBank}
+                    'questionBank': questionBank,
+                    'message': message}
 
             return render(request, 'recognition/questionseries.html', args)
 
     args = {'class': classes, 'questionBank_subject': questionBank_subject,
-            'questionBank_testseries': questionBank_testseries, 'isEmpty': isEmpty}
+            'questionBank_testseries': questionBank_testseries, 'isEmpty': isEmpty,'message': message}
     return render(request, 'recognition/questionseries.html', args)
 
 
@@ -465,6 +471,7 @@ def view_student(request):
     if request.method == 'POST':
         if 'class' in request.POST:
             class1 = request.POST['class']
+            request.session['class'] = class1
             students = Student.objects.filter(s_class = class1).order_by('s_rollno')
 
             args = {'class': classes, 'students': students, 'message': error}
@@ -518,10 +525,16 @@ def view_student(request):
                 return render(request, 'recognition/editstudent.html', args)
             else:
                 Student.objects.create(s_rollno=s_rollno, s_name=s_name, s_class=s_class, s_school_name=s_school)
+                class1 = request.session['class']
+                students = Student.objects.filter(s_class=class1).order_by('s_rollno')
                 error = 2
-                args = {'class': classes,'message': error}
+                args = {'class': classes,'students':students,'message': error}
                 return render(request, 'recognition/editstudent.html', args)
 
     args = {'class': classes,'message': error}
     return  render(request, 'recognition/editstudent.html',args)
 
+
+
+def logout(request):
+    pass
