@@ -63,19 +63,19 @@
             <form action="" method="post">
                {% csrf_token %}
                <label>Choose the Class</label>
-               <select class="selectpicker" data-style="btn-info" multiple data-max-options="1" name="class">
+               <select class="selectpicker" data-style="btn-info" multiple data-max-options="1" name="class" required>
                   {% for entry in class %}
                   <option value="{{ entry.qp_class }}">{{ entry.qp_class }}</option>
                   {% endfor %}
                </select>
                <label>Choose the Subject</label>
-               <select class="selectpicker" data-style="btn-info" multiple data-max-options="1" name="subject">
+               <select class="selectpicker" data-style="btn-info" multiple data-max-options="1" name="subject" required>
                   {% for entry in questionBank_subject %}
                   <option value="{{ entry.qp_subject }}">{{ entry.qp_subject }}</option>
                   {% endfor %}
                </select>
                <label>Choose the Test Series</label>
-               <select class="selectpicker" data-style="btn-info" multiple data-max-options="1" name="testseries">
+               <select class="selectpicker" data-style="btn-info" multiple data-max-options="1" name="testseries" required>
                   {% for entry in questionBank_testseries %}
                   <option value="{{ entry.qp_test_series }}">{{ entry.qp_test_series }}</option>
                   {% endfor %}
@@ -191,7 +191,7 @@
             <div class="md-form mb-4">
                <label data-error="wrong" data-success="right" for="qbAnswer">Answer</label>
 
-               <input type="text" name="qbAnswer" id="qbAnswer" class="form-control validate">
+               <input type="text" name="qbAnswer" id="qbAnswer" class="form-control validate" required>
             </div>
 
          </div>

@@ -68,27 +68,27 @@ $(".container").show();
 		</table>
 	</header>
 <br><br>
-	<div class="loader" id="loader" style="display:block"><img src="{% static 'images/loader.gif'%}" ></div>
-	<div class="container" id="container" style="display:none" >
+	<div class="loader" id="loader" style="display:none"><img src="{% static 'images/loader.gif'%}" ></div>
+	<div class="container" id="container" >
 		<h1 align="center">Evaluation</h1><hr>
 
 		<form action='' method="post" enctype="multipart/form-data">
 			{% csrf_token %}
 			<label><b>Choose Subject</b></label>
-			<select name="subject">
+			<select name="subject" required>
 				{% for entry in questionBank_subject %}
     				<option value="{{ entry.qp_subject }}">{{ entry.qp_subject }}</option>
 				{% endfor %}
 			</select>
 			<label><b>Choose Test Series</b></label>
-			<select name="testseries">
+			<select name="testseries" required>
 				{% for entry in questionBank_testseries %}
     				<option value="{{ entry.qp_test_series }}">{{ entry.qp_test_series }}</option>
 				{% endfor %}
 			</select>
 
 			<label><b>Choose Class</b></label>
-			<select name="class">
+			<select name="class" required>
                 {% for entry in class %}
     				<option value="{{ entry.qp_class }}">{{ entry.qp_class }}</option>
 				{% endfor %}
@@ -98,7 +98,7 @@ $(".container").show();
 			<p><input id = "answer" type="file" name="answer" accept="image/*"></p>
 
 			<label><b>Enter Roll Number</b></label>
-			<select name="s_rollno">
+			<select name="s_rollno" required>
                 {% for rollno in r_no %}
     				<option value="{{ rollno.s_rollno }}">{{ rollno.s_rollno }}</option>
 
