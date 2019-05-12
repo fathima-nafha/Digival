@@ -49,10 +49,20 @@ hr {
     color: white;
 }
 /* Set a style for the submit button */
-.registerbtn, #submitBtn, #backBtn {
+.registerbtn, #submitBtn {
   background-color: #4CAF50;
   color: white;
   padding: 16px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}
+#backBtn{
+    background-color: #4CAF50;
+  color: white;
+  padding: 8px 20px;
   margin: 8px 0;
   border: none;
   cursor: pointer;

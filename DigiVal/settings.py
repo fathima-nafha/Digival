@@ -42,6 +42,19 @@ INSTALLED_APPS = [
     'widget_tweaks',
 
 ]
+
+#for gmail
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'nafhafathima67@gmail.com'
+SERVER_EMAIL = 'nafhafathima67@gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'digival123@gmail.com'
+EMAIL_HOST_PASSWORD = 'nafha$123'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

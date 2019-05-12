@@ -106,13 +106,14 @@ button:hover, a:hover {
 <br><br>
 <br><br><br>
 
-<div style="text-align: center;">
-<a href="{% url 'recognition:view_student' %}">
-<button style="background-color:#5680e9;color:white;width:20%;">EDIT  STUDENT DETAILS</button></a>  &nbsp; &nbsp; &nbsp; &nbsp;
-<a href="{% url 'recognition:qs' %}"><button style="background-color:#5680e9;color:white; width:20%;" >QUESTION SERIES </button></a>
 
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="{% url 'recognition:login' %}"> <button style="background-color:#5680e9;color:white;width:20%;">LOGOUT</button></a>
+
+<div align="center">
+    <a href="{% url 'recognition:view_student' %}"><button style="background-color:#5680e9;color:white;width:30%;">EDIT  STUDENT DETAILS</button></a> &nbsp;&nbsp;
+    <a href="{% url 'recognition:qs' %}"><button style="background-color:#5680e9;color:white; width:30%;" >QUESTION SERIES </button></a><br>
+    <a href="{% url 'recognition:homepage' %}"> <button style="background-color:#5680e9;color:white;width:30%;">HOMEPAGE</button></a> &nbsp;&nbsp;
+    <a href="{% url 'recognition:logout' %}"><button style="background-color:#5680e9;color:white;width:30%;">LOGOUT</button></a>
+
 </div>
 <br>
 <br><br><br>

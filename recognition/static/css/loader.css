@@ -1,4 +1,7 @@
-
+#loader{
+    margin-left: 600px;
+    padding-top : 100px;
+}
 .hide-loader{
 display:none;
 }

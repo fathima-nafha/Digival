@@ -3,23 +3,126 @@ import pandas
 import re
 import time
 
+#gmail
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template import loader
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.db.models.query_utils import Q
+from django.views.generic import *
+from django.contrib.auth.models import User
+
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-from .forms import UploadQuestionBank, RegisterForm
+from .forms import UploadQuestionBank, RegisterForm , SetPasswordForm, PasswordResetRequestForm
 from .models import AddQuestionBank
 from .models import QuestionBank, StudentMarks, Student, Teacher, QuestionPaper
 from .recognize import recognize, evaluate_paper
 
 
 # Create your views here.
+def validate_email_address(email):
+    #This method here validates the if the input is an email address or not. Its return type is boolean, True if the input is a email address or False if its not.
+
+        try:
+            validate_email(email)
+            return True
+        except ValidationError:
+            return False
 
 
+def ResetPasswordRequestView(request, *args, **kwargs):
+    template = 'recognition/forgot_password.html'
+    success_url = 'recognition/Sign_in.html'
 
-def forgot(request):
-    return render(request, 'recognition/forgotpassword.html')
+    if request.method == 'POST':
+        form = PasswordResetRequestForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data["email_or_username"]
+        if validate_email_address(data) is True:
+            associated_users = User.objects.filter(Q(email=data) | Q(username=data))
+            if associated_users.exists():
+                for user in associated_users:
+                    c = {
+                        'email': user.email,
+                        'domain': request.META['HTTP_HOST'],
+                        'site_name': 'Digival',
+                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                        'user': user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                    }
+                    email_template_name = 'recognition/password_reset_email.html'
+                    email = loader.render_to_string(email_template_name, c)
+                    send_mail('Reset Password', email, settings.DEFAULT_FROM_EMAIL, [user.email], fail_silently=False)
+                messages.success(request,'An email has been sent to ' + data + ". Please check its inbox to continue reseting password.")
+                return render(request, 'recognition/forgot_password.html', {'form': form})
+            messages.error(request, 'No user is associated with this email address')
+            return render(request, 'recognition/forgot_password.html', {'form': form})
+        else:
+            associated_users = User.objects.filter(username=data)
+            if associated_users.exists():
+                for user in associated_users:
+                    c = {
+                        'email': user.email,
+                        'domain': request.META['HTTP_HOST'],
+                        'site_name': 'Digival',
+                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                        'user': user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                    }
+                    email_template_name = 'recognition/password_reset_email.html'
+                    email = loader.render_to_string(email_template_name, c)
+                    send_mail('Reset Password', email, settings.DEFAULT_FROM_EMAIL, [user.email], fail_silently=False)
+                messages.success(request,'Email has been sent to ' + data + "'s email address. Please check its inbox to continue reseting password.")
+                return render(request, 'recognition/forgot_password.html', {'form': form})
+            else:
+                messages.error(request, 'This username does not exist in the system.')
+                return render(request, 'recognition/forgot_password.html', {'form': form})
+        messages.error(request, 'Invalid Input')
+        return render(request, 'recognition/forgot_password.html', {'form': form})
+    else:
+        form = PasswordResetRequestForm()
+    return render(request, template, {'form': form})
+
+
+def PasswordResetConfirmView(request, uid = None, token = None, *args, **kwargs):
+    if request.method == 'POST':
+        UserModel = get_user_model()
+        form = SetPasswordForm(request.POST)
+        assert uid is not None and token is not None  # checked by URLconf
+        try:
+            uid = urlsafe_base64_decode(uid)
+            user = UserModel._default_manager.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            if form.is_valid():
+                new_password = form.cleaned_data['new_password2']
+                user.set_password(new_password)
+                user.save()
+                messages.success(request, 'Password has been reset.')
+                return render(request, 'recognition/reset_password_confirm.html')
+            else:
+                messages.error(request, 'Password reset has not been successful.')
+                return render(request, 'recognition/reset_password_confirm.html')
+        else:
+            messages.error(request, 'The reset password link is no longer valid.')
+            return render(request, 'recognition/reset_password_confirm.html')
+    else:
+        form = SetPasswordForm()
+    return render(request, 'recognition/reset_password_confirm.html', {'form': form})
 
 
 def login(request):
@@ -213,7 +316,10 @@ def question(request):
         form=UploadQuestionBank()
     return render(request,'recognition/question.html',{ 'form':form })
 
+
 def answerkeys(request):
+    if not request.session.has_key('t_id'):
+        return login(request)
     if request.method == 'POST':
         ques = request.POST.getlist('ques[]')
         ans = request.POST.getlist('ans[]')
@@ -231,10 +337,11 @@ def answerkeys(request):
         return render(request,'recognition/homepage.html')
     else:
         return render(request, 'recognition/answerkeys.html')
-    #return render(request, 'recognition/answerkeys.html')
+    return render(request, 'recognition/answerkeys.html')
 
 
 def results(request):
+
     if not request.session.has_key('t_id'):
         return login(request)
     isEmpty = 1
@@ -281,8 +388,9 @@ def homepage(request):
     t_id = request.session['t_id']
     return render(request, 'recognition/homepage.html', {"t_id": t_id})
 
-def questionseries(request):
 
+def questionseries(request):
+    message = 0
     if not request.session.has_key('t_id'):
         return login(request)
 
@@ -295,7 +403,9 @@ def questionseries(request):
         subject = request.POST['subject']
         testseries = request.POST['testseries']
         qb_class = request.POST['class']
-
+        request.session['subject'] = subject
+        request.session['testseries'] = testseries
+        request.session['qb_class'] = qb_class
         if not QuestionPaper.objects.filter(qp_class = qb_class, qp_subject = subject, qp_test_series = testseries).exists():
             isEmpty = 1
         else:
@@ -309,31 +419,33 @@ def questionseries(request):
                 'questionBank_testseries': questionBank_testseries,
                 'isEmpty': isEmpty,
                 'questionBank': questionBank,
-                'questionPaper': questionPaper}
+                'questionPaper': questionPaper,'message': message}
 
             return render(request, 'recognition/questionseries.html', args)
     if request.method == 'POST' and 'qbAnswer' in request.POST:
 
         qbAnswer = request.POST['qbAnswer']
         q_id = request.POST['q_id']
+        message = 1
         QuestionBank.objects.filter(q_id=q_id).update(qb_answers=qbAnswer)
         if request.session.has_key('subject') and request.session.has_key('qb_class') and request.session.has_key('testseries') :
             subject = request.session['subject']
             qb_class = request.session['qb_class']
             testseries = request.session ['testseries']
+
             questionBank = QuestionBank.objects.filter(qb__qp_class=qb_class, qb__qp_subject=subject,
                                                        qb__qp_test_series=testseries)
             args = {'class': classes,
                     'questionBank_subject': questionBank_subject,
                     'questionBank_testseries': questionBank_testseries,
-                    'questionBank': questionBank}
+                    'questionBank': questionBank,
+                    'message': message}
 
             return render(request, 'recognition/questionseries.html', args)
 
     args = {'class': classes, 'questionBank_subject': questionBank_subject,
-            'questionBank_testseries': questionBank_testseries, 'isEmpty': isEmpty}
+            'questionBank_testseries': questionBank_testseries, 'isEmpty': isEmpty,'message': message}
     return render(request, 'recognition/questionseries.html', args)
-
 
 
 def userprofile(request):
@@ -362,6 +474,7 @@ def view_student(request):
     if request.method == 'POST':
         if 'class' in request.POST:
             class1 = request.POST['class']
+            request.session['class'] = class1
             students = Student.objects.filter(s_class = class1).order_by('s_rollno')
 
             args = {'class': classes, 'students': students, 'message': error}
@@ -415,10 +528,19 @@ def view_student(request):
                 return render(request, 'recognition/editstudent.html', args)
             else:
                 Student.objects.create(s_rollno=s_rollno, s_name=s_name, s_class=s_class, s_school_name=s_school)
+                class1 = request.session['class']
+                students = Student.objects.filter(s_class=class1).order_by('s_rollno')
                 error = 2
-                args = {'class': classes,'message': error}
+                args = {'class': classes,'students':students,'message': error}
                 return render(request, 'recognition/editstudent.html', args)
 
     args = {'class': classes,'message': error}
     return  render(request, 'recognition/editstudent.html',args)
 
+
+def logout(request):
+    try:
+        del request.session['t_id']
+    except KeyError:
+        pass
+    return redirect('recognition:login')
