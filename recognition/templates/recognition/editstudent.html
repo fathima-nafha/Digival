@@ -1,6 +1,7 @@
 {% load static %}
 
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Student Details</title>
@@ -16,7 +17,9 @@
 
     </script>
 </head>
-<body>
+
+<body style="background-image:url(/static/images/blue2.jpg);">
+
     <div class="container">
          <div class="card">
             <form action="" method="post">
@@ -28,14 +31,15 @@
                   <option value="{{ entry.s_class }}">{{ entry.s_class }}</option>
                   {% endfor %}
                </select>
-                <input type="submit" >
+                <input type="submit" style="color:white;">
             </form>
-             <center><a class="btn" type="submit" href="{% url 'recognition:userprofile' %}"><button id="backBtn">Back</button></a> </center>
+             <center><a type="submit" href="{% url 'recognition:userprofile' %}"><br>
+                 <button id="backBtn" style="color:white;">Back </button></a> </center>
 
     </div>
     <div class="container1">
-        <button id="btn1" type="button" class="modalAddSudentForm btn btn-success" data-toggle="modal" data-target="#modalAddSudentForm">Add New Student</button>
-        <button class="modalManyStudents btn btn-danger" id="btn2" type="button" data-toggle="modal" data-target="#modalManyStudents">Add New Class</button>
+        <button id="btn1" type="button" style="background-color:black;color:white;" class="modalAddSudentForm btn" data-toggle="modal" data-target="#modalAddSudentForm">Add New Student</button>
+        <button class="modalManyStudents btn" id="btn2" type="button" style="background-color:black;color:white;" data-toggle="modal" data-target="#modalManyStudents">Add New Class</button>
 
     </div>
 
@@ -95,7 +99,7 @@
 
          </div>
          <div class="modal-footer d-flex justify-content-center">
-            <button class="btn btn-default btn-success" onClick="CloseAndRefresh(); return:true;" >Save</button>
+            <button style="background-color:#5680e9;color:white;"  class="btn btn-default btn-success" onClick="CloseAndRefresh(); return:true;" >Save</button>
          </div>
          </form>
       </div>
@@ -125,7 +129,7 @@
 
          </div>
          <div class="modal-footer d-flex justify-content-center">
-            <button class="btn btn-default btn-success" onClick="CloseAndRefresh(); return:true;" >Save</button>
+            <button class="btn btn-default"  style="background-color:#5680e9;color:white;" onClick="CloseAndRefresh(); return:true;" >Save</button>
          </div>
          </form>
       </div>

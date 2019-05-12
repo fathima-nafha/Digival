@@ -22,7 +22,8 @@
 		</table>
 	</header><br><br><br>
 <br><br>
-	<div class="container">
+	<div class="container" style="width:40%;">
+
 		<h1 align="center">Upload Question Paper</h1><hr>
        <form action="{% url 'recognition:question' %}" enctype="multipart/form-data" method="post" >
 		   {% csrf_token %}

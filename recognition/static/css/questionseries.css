@@ -74,11 +74,12 @@ input[type=submit]{
   outline-color:black;
   width:150px;
   margin-top: 10px;
- margin-left: 40px;
+ margin-left: 50px;
   padding: 15px;
   cursor:pointer;
 }
 #backBtn{
+
   background-color:black;
   color: white;
   outline-color:black;
