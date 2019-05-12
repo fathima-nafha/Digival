@@ -72,7 +72,7 @@ input[type=submit]{
   background-color:black;
   color: white;
   outline-color:black;
-  width:100%;
+  width:150px;
   margin-top: 10px;
  margin-left: 0px;
   padding: 15px;
@@ -83,7 +83,7 @@ input[type=submit]{
   background-color:black;
   color: white;
   outline-color:black;
-  width:100%;
+  width:150px;
 
   padding: 15px;
   cursor:pointer;

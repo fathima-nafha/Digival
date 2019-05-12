@@ -40,21 +40,10 @@ tbody, th{
 }
 #btn1{
     margin-left: 300px;
-
-     border-radius: 1px;
-  font-size: 18;
-
-  margin-top: 10px;padding: 10px;
-  cursor:pointer;
 }
 
 #btn2{
-    margin-left:80px;
-   border-radius: 1px;
-  font-size: 18;
-
-  margin-top: 10px;padding: 10px;
-  cursor:pointer;
+    margin-left:100px;
 }
 label{
    padding: 10px 10px 5px 0px;
@@ -93,7 +82,7 @@ input[type=submit]{
   font-size: 15;
   width:100px;
   margin-top: 10px;
-  margin-left:0px;
+  margin-left: 75px;
   padding: 10px;
   cursor:pointer;
 }

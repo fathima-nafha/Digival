@@ -62,8 +62,10 @@ hr {
 #backBtn{
   background-color:#5680e9;
   color: white;
+    background-color: #5680e9;
   padding: 8px 20px;
   margin: 8px 0;
+  color: white;
   border: none;
   cursor: pointer;
   width: 100%;

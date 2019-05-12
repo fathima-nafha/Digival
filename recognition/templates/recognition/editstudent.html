@@ -30,20 +30,16 @@
                   {% for entry in class %}
                   <option value="{{ entry.s_class }}">{{ entry.s_class }}</option>
                   {% endfor %}
-               </select><br><br>
-                <input type="submit" style="background-color:black;color:white;width:100%;">
+               </select>
+                <input type="submit" >
             </form>
              <center><a type="submit" href="{% url 'recognition:userprofile' %}"><br>
-                 <button id="backBtn" style="background-color:black;color:white; width:100%;border-radius: 1px;
-  font-size: 15;
-
-  margin-top: 10px;padding: 10px;
-  cursor:pointer;">Back </button></a> </center>
+                 <button id="backBtn" style="background-color:#5680e9;color:white;">Back </button></a> </center>
 
     </div>
     <div class="container1">
-        <button id="btn1" type="button" style="background-color:#5680e9;color:white;" class="modalAddSudentForm btn" data-toggle="modal" data-target="#modalAddSudentForm">Add New Student</button>
-        <button class="modalManyStudents btn" id="btn2" type="button" style="background-color:#5680e9;color:white;" data-toggle="modal" data-target="#modalManyStudents">Add New Class</button>
+        <button id="btn1" type="button" style="background-color:black;color:white;" class="modalAddSudentForm btn" data-toggle="modal" data-target="#modalAddSudentForm">Add New Student</button>
+        <button class="modalManyStudents btn" id="btn2" type="button" style="background-color:black;color:white;" data-toggle="modal" data-target="#modalManyStudents">Add New Class</button>
 
     </div>
 
@@ -103,7 +99,7 @@
 
          </div>
          <div class="modal-footer d-flex justify-content-center">
-            <button style="background-color:#5680e9;color:white;"  class="btn btn-default" onClick="CloseAndRefresh(); return:true;" >Save</button>
+            <button style="background-color:#5680e9;color:white;"  class="btn btn-default btn-success" onClick="CloseAndRefresh(); return:true;" >Save</button>
          </div>
          </form>
       </div>
