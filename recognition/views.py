@@ -188,7 +188,7 @@ def signup(request):
                 l_name = form.cleaned_data['last_name']
                 email = form.cleaned_data['email']
 
-                # Login the user
+                #Login the user
                 auth_login(request, user)
                 teacher = Teacher.objects.create(t_name=f_name +" "+ l_name, t_email=email)
                 # redirect to accounts page:
