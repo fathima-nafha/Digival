@@ -60,7 +60,7 @@ hr {
   opacity: 0.9;
 }
 #backBtn{
-    background-color: #4CAF50;
+  background-color:#5680e9;
   color: white;
   padding: 8px 20px;
   margin: 8px 0;
@@ -68,6 +68,7 @@ hr {
   cursor: pointer;
   width: 100%;
   opacity: 0.9;
+   cursor:pointer;
 }
 /*random change*/
 .registerbtn:hover, #submitBtn:hover {
