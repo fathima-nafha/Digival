@@ -76,20 +76,13 @@ label{
   z-index: 1;
 }
 input[type=submit]{
-  background-color:#5680e9;
+  background-color::#5680e9;
+  color: white;
   border-radius: 1px;
   font-size: 15;
   width:100px;
-  margin-top: 30px;
-  margin-left: 95px;
-  padding: 10px;
-  cursor:pointer;
-}
-#backBtn{
-  background-color:#5680e9;
-  border-radius: 1px;
-  font-size: 15;
-  width:100px;
+  margin-top: 10px;
+  margin-left: 75px;
   padding: 10px;
   cursor:pointer;
 }

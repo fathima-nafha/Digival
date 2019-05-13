@@ -241,6 +241,12 @@ def evaluate(request):
                           {'questionBank_subject': questionBank_subject,
                            'questionBank_testseries': questionBank_testseries, 'class': classes, 'r_no': rollno,
                            'messages': messages, 'show': show})
+        elif StudentMarks.objects.filter(student__s_rollno = qb_roll, student__s_class= qb_class, question_paper__qp_subject = subject,question_paper__qp_test_series = testseries ).exists():
+            messages = 6
+            return render(request, 'recognition/evaluate.html',
+                          {'questionBank_subject': questionBank_subject,
+                           'questionBank_testseries': questionBank_testseries, 'class': classes, 'r_no': rollno,
+                           'messages': messages, 'show': show})
 
         student = Student.objects.get(s_rollno=qb_roll, s_class=qb_class)
         answer_paper = request.FILES['answer']

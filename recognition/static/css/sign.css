@@ -50,7 +50,7 @@ hr {
 }
 /* Set a style for the submit button */
 .registerbtn, #submitBtn {
-  background-color: #5680e9;
+  background-color: #4CAF50;
   color: white;
   padding: 16px 20px;
   margin: 8px 0;
@@ -60,6 +60,8 @@ hr {
   opacity: 0.9;
 }
 #backBtn{
+  background-color:#5680e9;
+  color: white;
     background-color: #5680e9;
   padding: 8px 20px;
   margin: 8px 0;
@@ -68,6 +70,7 @@ hr {
   cursor: pointer;
   width: 100%;
   opacity: 0.9;
+   cursor:pointer;
 }
 /*random change*/
 .registerbtn:hover, #submitBtn:hover {
