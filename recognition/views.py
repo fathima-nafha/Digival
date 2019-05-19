@@ -267,7 +267,8 @@ def evaluate(request):
             for every in answers:
                 db_answer[every.qb_qno] = every.qb_answers
             test_score = evaluate_paper(results, db_answer)
-            answer_model = StudentMarks.objects.filter(question_paper=qp, teacher = teacher, student=student, answer_paper = answer_paper).update(marks=test_score)
+            print('score is', test_score)
+            StudentMarks.objects.filter(question_paper=qp,student=student).update(marks = test_score)
             messages = 3
 
         else:

@@ -32,20 +32,28 @@ def evaluate_paper(results, db_answer):
     for everyLine in val:
         cleanString = re.sub('\W+', '', everyLine)
         final_str.append(cleanString.lower())
+    new_str = list()
 
     score = 0
-    print(final_str)
+    print(new_str)
+    print(db_answer)
     for key, val in db_answer.items():
+        val = val.lower()
+
+    for key, val in db_answer.items():
+        print(key, val)
         for item in final_str:
-            if (item.startswith(key)) and (val in spell(item[1:])):
+            if val.lower() in item:
+                score+=1
+            elif (item.startswith(key)) and (val in spell(item[1:])):
                 print(spell(item[1:]))
                 score += 1
             elif val in spell(item):
                 print(spell(item))
                 score += 1
             elif val in spell(item[1:]):
-                score +=1
-
+                score += 1
+        print(score)
     return score
 
 
